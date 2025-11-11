@@ -69,75 +69,102 @@ export default function HeroSection() {
           quality={100}
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-opacity-40 z-[1]"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent z-[1]"></div>
 
-        {/* Left Circular Element - desktop only */}
+        {/* Navigation Buttons - Desktop */}
         <button
           onClick={handlePrev}
           disabled={slides.length <= 1}
-          className="absolute left-6 top-1/2 z-50 -translate-y-1/2 w-14 h-14 bg-primary rounded-full hidden lg:flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform duration-200"
+          className="absolute left-8 top-1/2 z-50 -translate-y-1/2 w-12 h-12 bg-primary/90 backdrop-blur-sm rounded-lg hidden lg:flex items-center justify-center cursor-pointer shadow-xl hover:bg-primary hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ArrowRight className="w-6 h-6 text-primary-foreground rotate-180" />
+          <ArrowRight className="w-5 h-5 text-primary-foreground rotate-180" />
         </button>
 
-        {/* Right Circular Button - desktop only */}
         <button
           onClick={handleNext}
           disabled={slides.length <= 1}
-          className="absolute right-6 top-1/2 z-50 -translate-y-1/2 w-14 h-14 bg-primary rounded-full hidden lg:flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform duration-200"
+          className="absolute right-8 top-1/2 z-50 -translate-y-1/2 w-12 h-12 bg-primary/90 backdrop-blur-sm rounded-lg hidden lg:flex items-center justify-center cursor-pointer shadow-xl hover:bg-primary hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ArrowRight className="w-6 h-6 text-primary-foreground" />
+          <ArrowRight className="w-5 h-5 text-primary-foreground" />
         </button>
 
         {/* Main Content */}
-        <div className="relative z-10 max-w-7xl mx-auto h-full flex flex-col justify-center px-6 lg:px-24 pt-20 lg:pt-24">
-          <div className="max-w-2xl">
-            <p className="bg-white w-fit text-blue-500 rounded-full px-3 py-1 text-xs sm:text-sm font-semibold mb-4 uppercase tracking-wide items-center gap-2 hidden lg:flex">
-              <span className="w-2 h-2 bg-blue-500 rounded-full inline-block"></span>
-              WELCOME YOU TO CONSTRUCT
-            </p>
+        <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-6 lg:px-20 pt-20 lg:pt-24">
+          <div className="max-w-3xl w-full space-y-4 text-center">
+            {/* Welcome Badge */}
+            <div className="inline-flex items-center gap-2 bg-primary-foreground/95 backdrop-blur-sm text-primary rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider shadow-lg">
+              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
+              <span>Welcome You To Construct</span>
+            </div>
 
-            <h1 className="text-hero-heading text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight mb-8">
+            {/* Main Heading */}
+            <h1 className="text-hero-heading text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold leading-tight drop-shadow-2xl">
               {currentSlide.heading.split("\n").map((line, i) => (
-                <span key={i}>
+                <span key={i} className="block">
                   {line}
-                  {i < currentSlide.heading.split("\n").length - 1 && <br />}
                 </span>
               ))}
             </h1>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4 lg:gap-6">
+            {/* CTA Section */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <Link href={currentSlide.buttonUrl}>
                 <SolidButton text={currentSlide.buttonText} />
               </Link>
 
-              <div className="flex items-center gap-3 bg-background px-5 py-3 lg:py-2 rounded-full shadow-lg">
-                <div className="flex gap-2 justify-center items-center">
-                  <Phone className="w-5 h-5 text-primary" />
-                  <p className="text-foreground font-semibold">{settings?.phone}</p>
+              <div className="flex items-center gap-2.5 bg-background/95 backdrop-blur-sm px-4 py-1 rounded-md shadow-xl border border-primary/20">
+                <div className="flex flex-col leading-tight">
+                  <div className="flex gap-2 items-center ">
+                    <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Phone className="w-3 h-3 text-primary" />
+                    </div>
+                    <span className="text-[9px] text-foreground/70 font-medium uppercase">
+                      Call Us Now
+                    </span>
+                  </div>
+                  <p className="text-foreground font-bold text-sm">
+                    {settings?.phone}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Mobile/Tablet Decorative Arrows */}
-          <div className="flex justify-center gap-6 mt-8 lg:hidden pb-16 z-[2]">
+          {/* Mobile Navigation */}
+          <div className="flex justify-center gap-4 mt-10 lg:hidden pb-12 z-[2]">
             <button
               onClick={handlePrev}
               disabled={slides.length <= 1}
-              className="w-14 h-14 bg-primary rounded-full flex items-center justify-center cursor-pointer shadow-lg"
+              className="w-12 h-12 bg-primary/90 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-xl active:scale-95 transition-all disabled:opacity-50"
             >
-              <ArrowRight className="w-6 h-6 text-primary-foreground rotate-180" />
+              <ArrowRight className="w-5 h-5 text-primary-foreground rotate-180" />
             </button>
             <button
               onClick={handleNext}
               disabled={slides.length <= 1}
-              className="w-14 h-14 bg-primary rounded-full flex items-center justify-center cursor-pointer shadow-lg"
+              className="w-12 h-12 bg-primary/90 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-xl active:scale-95 transition-all disabled:opacity-50"
             >
-              <ArrowRight className="w-6 h-6 text-primary-foreground" />
+              <ArrowRight className="w-5 h-5 text-primary-foreground" />
             </button>
           </div>
+
+          {/* Slide Indicators */}
+          {slides.length > 1 && (
+            <div className="absolute bottom-12 sm:bottom-24 md:bottom-32 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    index === currentIndex
+                      ? "w-8 bg-primary"
+                      : "w-1.5 bg-primary-foreground/50 hover:bg-primary-foreground"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <HeroBanner />

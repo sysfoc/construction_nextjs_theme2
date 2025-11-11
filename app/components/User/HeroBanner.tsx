@@ -4,11 +4,11 @@ import { useGeneralSettings } from "@/app/context/GeneralSettingsContext";
 
 export default function HeroBanner() {
   const { settings } = useGeneralSettings();
-  
+
   return (
-    <div className="relative max-w-5xl z-20 mr-auto -mt-8">
+    <div className="relative max-w-5xl z-20 m-auto px-10 md:px-0 -mt-8">
       {/* Background with diagonal cut */}
-      <div className="bg-background clip-diagonal">
+      <div className="bg-background rounded-3xl">
         <div className="flex items-center justify-between px-4 lg:px-6 py-3 gap-4">
           {/* Email Section (hidden below md) - Now First */}
           <div className="hidden md:flex items-center gap-3 flex-shrink min-w-0 max-w-xs">
@@ -58,10 +58,9 @@ export default function HeroBanner() {
         </div>
       </div>
 
-      {/* Worker Image OUTSIDE of clip-diagonal - Now on Right */}
-      <div className="absolute top-0 right-0 -mt-10 mr-4 w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 z-20">
+      <div className="absolute top-0 right-0 -mt-10 mr-4 w-28 h-28 sm:w-28 sm:h-28 lg:w-32 lg:h-32 z-20">
         <Image
-          src="/Herosection/constructionImage_02.png"
+          src="/Herosection/construction-worker.png"
           alt="Construction worker"
           fill
           className="object-contain"

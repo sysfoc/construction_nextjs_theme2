@@ -15,6 +15,7 @@ interface BlogPost {
 
 const BlogCards: React.FC = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,13 +26,15 @@ const BlogCards: React.FC = () => {
         setBlogPosts(data.blogs.slice(0, 3));
       } catch (error) {
         console.error("Error fetching blogs:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchBlogs();
   }, []);
 
   return (
-    <div className="w-full py-12 px-4">
+    <div className="w-full py-12 px-4 min-h-[452px]">
       {/* View All Blogs */}
       <div className="mb-6 flex justify-end">
         <SlantedButton text="View all Blogs" onClick={() => router.push("/blogs")} />
@@ -39,40 +42,46 @@ const BlogCards: React.FC = () => {
 
       <div className="max-w-6xl mx-auto">
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts.map((post, idx) => (
-            <Link href={`/blogs/${post.slug}`} key={idx}>
-              <div className="flex flex-col bg-background rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
-                {/* Image */}
-                <div className="relative w-full h-48">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover"
-                  />
-                  {/* Date Badge */}
-                  <div className="absolute top-3 left-3 bg-[var(--color-primary)] text-[var(--color-primary-foreground)] font-bold w-14 h-14 flex flex-col items-center justify-center text-center transform -skew-x-6">
-                    <span className="text-xl">{new Date(post.createdAt).getDate()}</span>
-                    <span className="text-xs">
-                      {new Date(post.createdAt).toLocaleDateString("en-US", { month: "short" })}
-                    </span>
+        {loading ? (
+          <div className="w-full flex justify-center items-center">
+            <p className="text-gray-700 font-medium">Loading blogs...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogPosts.map((post, idx) => (
+              <Link href={`/blogs/${post.slug}`} key={idx}>
+                <div className="flex flex-col bg-background rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
+                  {/* Image */}
+                  <div className="relative w-full h-48">
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                    />
+                    {/* Date Badge */}
+                    <div className="absolute top-3 left-3 bg-[var(--color-primary)] text-[var(--color-primary-foreground)] font-bold w-14 h-14 flex flex-col items-center justify-center text-center transform -skew-x-6">
+                      <span className="text-xl">{new Date(post.createdAt).getDate()}</span>
+                      <span className="text-xs">
+                        {new Date(post.createdAt).toLocaleDateString("en-US", { month: "short" })}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-3 flex flex-col flex-1">
+                    <h3 className="text-md font-semibold text-paragraph mb-2 line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-xs text-paragraph/80 mt-auto">
+                      By <span className="text-paragraph">{post.blogWriter}</span>
+                    </p>
                   </div>
                 </div>
-
-                {/* Content */}
-                <div className="p-3 flex flex-col flex-1">
-                  <h3 className="text-md font-semibold text-paragraph mb-2 line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-xs text-paragraph/80 mt-auto">
-                    By <span className="text-paragraph">{post.blogWriter}</span>
-                  </p>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -47,9 +47,9 @@ export default function ServicesGrid() {
 
   if (loading) {
     return (
-      <div className="py-10 dark:bg-gray-900">
+      <div className="py-10 min-h-[715px]">
         <div className="container mx-auto px-5 sm:px-16 flex items-center justify-center min-h-80">
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
+          <p className="text-paragraph text-sm">
             Loading services...
           </p>
         </div>
@@ -58,7 +58,7 @@ export default function ServicesGrid() {
   }
 
   return (
-    <div className="py-10 dark:bg-gray-900">
+    <div className="py-10 min-h-[715px]">
       <div className="container mx-auto px-5 sm:px-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (

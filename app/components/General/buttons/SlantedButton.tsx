@@ -1,6 +1,7 @@
 // app/components/General/buttons/SlantedButton.tsx
 import { RiArrowRightDoubleLine } from "react-icons/ri";
 import React from "react";
+import { ArrowBigRightDash } from "lucide-react";
 
 interface SlantedButtonProps {
   text?: string;
@@ -23,7 +24,8 @@ const SlantedButton: React.FC<SlantedButtonProps> = ({
 
       {/* Black arrow side */}
       <span className="absolute right-0 top-0 h-full w-[40px] bg-black flex items-center justify-center">
-        <RiArrowRightDoubleLine className="w-5 h-5 text-[var(--color-primary-foreground)]" />
+        {/* <RiArrowRightDoubleLine className="w-5 h-5 text-[var(--color-primary-foreground)]" /> */}
+        <ArrowBigRightDash className="w-5 h-5 text-[var(--color-primary-foreground)]" />
       </span>
     </button>
   );

@@ -49,7 +49,7 @@ const AgencyFAQ: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-[var(--color-background)] text-[var(--color-foreground)] py-6 px-6">
+    <div className="w-full bg-[var(--color-background)] text-[var(--color-foreground)] py-6 px-6 min-h-[472px]">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Side - FAQ */}
