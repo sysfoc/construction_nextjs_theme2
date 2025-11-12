@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import SlantedButton from "../General/buttons/SlantedButton";
 import Link from "next/link";
+import Loader from "../General/Loader";
 
 interface BlogPost {
   image: string;
@@ -34,7 +35,7 @@ const BlogCards: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full py-12 px-4 min-h-[452px]">
+    <div className="w-full py-12 px-4 min-h-[536px]">
       {/* View All Blogs */}
       <div className="mb-6 flex justify-end">
         <SlantedButton text="View all Blogs" onClick={() => router.push("/blogs")} />
@@ -43,9 +44,7 @@ const BlogCards: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Grid */}
         {loading ? (
-          <div className="w-full flex justify-center items-center">
-            <p className="text-gray-700 font-medium">Loading blogs...</p>
-          </div>
+          <Loader/>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {blogPosts.map((post, idx) => (

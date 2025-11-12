@@ -48,11 +48,11 @@ const SOCIAL_ICONS = {
 
 const QUICK_LINKS = [
   { name: "About", href: "/about" },
-  { name: "Careers", href: "/careers" },
   { name: "Contact", href: "/contact" },
+  { name: "Terms & conditions", href: "/terms-and-conditions" },
+  { name: "Privacy policy", href: "/privacy-policy" },
   { name: "News letter", href: "/newsletter" },
   { name: "How we work", href: "/how-we-work" },
-  { name: "FAQ", href: "/faqs" },
 ];
 
 const SHOWCASE_LINKS = [

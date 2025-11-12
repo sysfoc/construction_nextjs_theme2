@@ -15,7 +15,7 @@ export default function BillingAndDetails() {
           </>
         }
         description="For each project we establish relationships with partners who provide value."
-        imageSrc="/priceCard/priceCard_01.png"
+        imageSrc="/home/blueprint-review-onsite.jpg"
       />
 
       <PricingCard
@@ -28,7 +28,7 @@ export default function BillingAndDetails() {
           </>
         }
         description="Designed for teams who need advanced collaboration and premium support."
-        imageSrc="/priceCard/priceCard_04.png"
+        imageSrc="/home/demolition-work.jpg"
       />
 
       <PricingCard
@@ -41,7 +41,7 @@ export default function BillingAndDetails() {
           </>
         }
         description="A comprehensive package for enterprises requiring tailored solutions."
-        imageSrc="/priceCard/priceCard_03.png"
+        imageSrc="/home/foundation-excavation.jpg"
       />
     </div>
     </div>

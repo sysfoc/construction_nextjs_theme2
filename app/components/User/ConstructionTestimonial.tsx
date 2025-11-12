@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Loader from "../General/Loader"
 
 interface Testimonial {
   id: string;
@@ -15,6 +16,7 @@ interface Testimonial {
 const ConstructionTestimonial: React.FC = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,10 +27,18 @@ const ConstructionTestimonial: React.FC = () => {
         setTestimonials(data.testimonials?.slice(0, 3) || []);
       } catch (error) {
         console.error("Failed to fetch testimonials:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchTestimonials();
   }, []);
+
+  if (loading) {
+    return (
+        <Loader height="440px" />
+    );
+  }
 
   if (!testimonials.length) return null;
   const selectedTestimonial = testimonials[selectedIndex];

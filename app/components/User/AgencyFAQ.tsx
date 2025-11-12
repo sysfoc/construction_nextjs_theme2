@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Play } from "lucide-react";
+import Loader from "../General/Loader";
 
 interface FAQItem {
   _id: string;
@@ -24,7 +25,7 @@ const AgencyFAQ: React.FC = () => {
         const data = await response.json();
         const faqPageFAQs = data
           .filter((faq: FAQItem) => faq.showOnFAQPage)
-          .slice(0, 4); // show only top 4
+          .slice(0, 4);
         setFaqs(faqPageFAQs);
       } catch (error) {
         console.error("Error fetching FAQs:", error);
@@ -49,81 +50,94 @@ const AgencyFAQ: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-[var(--color-background)] text-[var(--color-foreground)] py-6 px-6 min-h-[472px]">
+    <div className="w-full bg-[var(--color-background)] text-[var(--color-foreground)] py-6 px-5 sm:px-8 my-16 min-h-[400px]">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Side - FAQ */}
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          {/* Left Side - FAQ Accordion */}
+          <div className="space-y-3">
             {loading ? (
-              <div className="text-center py-4 text-sm text-[var(--color-paragraph)]">
-                Loading FAQs...
-              </div>
+             <Loader/>
             ) : (
               faqs.map((faq, index) => (
                 <div
                   key={faq._id}
-                  className="border-b border-[var(--color-border)] pb-4"
+                  className="bg-[var(--color-header-background)] rounded-lg border border-[var(--color-border)] overflow-hidden hover:border-[var(--color-primary)] transition-all duration-300"
                 >
                   <button
                     onClick={() => toggleFAQ(index)}
-                    className="w-full flex items-start justify-between gap-4 text-left group"
+                    className="w-full flex items-center justify-between gap-3 text-left p-4 group"
                   >
-                    <h3 className="text-lg font-semibold text-[var(--color-header-text)] transition-colors group-hover:text-[var(--color-primary)]">
-                      {faq.question}
-                    </h3>
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[var(--color-primary)] text-2xl font-light transition-transform duration-300">
-                      {openIndex === index ? "−" : "+"}
-                    </span>
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--color-primary)]/20 transition-all">
+                        <span className="text-[var(--color-primary)] font-bold text-sm">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                      </div>
+                      <h3 className="text-sm font-bold text-[var(--color-header-text)] group-hover:text-[var(--color-primary)] transition-colors">
+                        {faq.question}
+                      </h3>
+                    </div>
+                    <div className={`w-6 h-6 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${openIndex === index ? 'rotate-180 bg-[var(--color-primary)]' : ''}`}>
+                      <span className={`text-lg font-light transition-colors text-primary`}>
+                        {openIndex === index ? "−" : "+"}
+                      </span>
+                    </div>
                   </button>
 
                   <div
                     className={`overflow-hidden transition-all duration-300 ease-in-out ${
                       openIndex === index
-                        ? "max-h-40 opacity-100 mt-3"
+                        ? "max-h-32 opacity-100"
                         : "max-h-0 opacity-0"
                     }`}
                   >
-                    <p className="text-[var(--color-paragraph)] text-sm leading-relaxed">
-                      {faq.answer}
-                    </p>
+                    <div className="px-4 pb-4 pl-16">
+                      <p className="text-[var(--color-paragraph)] text-xs leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))
             )}
           </div>
 
-          {/* Right Side - Image */}
-          <div className="relative w-full max-w-md mx-auto aspect-[4/3]">
-            <Image
-              src="/workers_02.png"
-              alt="Construction workers"
-              fill
-              className="object-contain"
-              priority
-            />
+          {/* Right Side - Image with Video Badge */}
+          <div className="relative w-full max-w-md mx-auto">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
+              <Image
+                src="/workers_02.png"
+                alt="Construction workers"
+                fill
+                className="object-contain"
+                priority
+              />
+              
+              {/* Decorative Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            </div>
 
-            {/* Badge */}
-            <div className="absolute top-40 left-16 hidden md:flex items-center justify-center w-20 h-20 bg-[var(--color-primary-foreground)] rounded-full shadow-lg">
-              <div className="relative w-full h-full flex items-center justify-center">
-                <Image
-                  src="/text.png"
-                  alt="Watch Video Text"
-                  fill
-                  className="object-contain scale-90"
-                />
-                <Play className="absolute w-5 h-5 text-[var(--color-primary)] " />
+            {/* Video Play Badge */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group cursor-pointer">
+              <div className="relative w-16 h-16 bg-[var(--color-primary-foreground)] rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform">
+                <Play className="w-6 h-6 text-[var(--color-primary)] ml-1" fill="currentColor" />
+              </div>
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                <span className="text-[10px] font-semibold text-[var(--color-paragraph)] bg-[var(--color-background)]/90 px-2 py-1 rounded">
+                  Watch Video
+                </span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Companies Section */}
-        <div className="mt-10">
-          <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-7 md:gap-14 lg:gap-28">
+        <div className="mt-8 pt-6 border-t border-[var(--color-border)]">
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-16">
             {companies.map((company, index) => (
               <div
                 key={index}
-                className="relative w-24 h-12 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                className="relative w-20 h-10 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer"
               >
                 <Image
                   src={company.image}

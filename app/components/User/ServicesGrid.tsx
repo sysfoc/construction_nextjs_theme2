@@ -4,6 +4,7 @@ import Image from "next/image";
 import SlantedButton from "../General/buttons/SlantedButton";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Loader from "../General/Loader";
 
 interface Service {
   id: string;
@@ -49,16 +50,12 @@ export default function ServicesGrid() {
 
   if (loading) {
     return (
-      <div className="py-7 min-h-[450px]">
-        <div className="container mx-auto px-5 sm:px-12 flex items-center justify-center min-h-80">
-          <p className="text-paragraph text-sm">Loading services...</p>
-        </div>
-      </div>
+       <Loader height="479px"/>
     );
   }
 
   return (
-    <div className="py-7 min-h-[450px]">
+    <div className="py-7 min-h-[479px]">
       <div className="container mx-auto px-5 sm:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((service) => (

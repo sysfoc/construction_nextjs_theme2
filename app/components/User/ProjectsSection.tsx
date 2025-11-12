@@ -5,12 +5,12 @@ import {
   MapPin,
   Users,
   FolderKanban,
-  ArrowRight,
   TrendingUp,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { ProjectData } from "@/lib/models/Project";
 import SlantedButton from "../General/buttons/SlantedButton";
+import Loader from "../General/Loader";
 
 const statusConfig = {
   ongoing: {
@@ -72,20 +72,16 @@ export default function ProjectsSection() {
 
   if (loading) {
     return (
-      <section className="px-6 max-w-6xl mx-auto py-8 min-h-[594px]">
-        <div className="text-center">
-          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
-      </section>
+      <Loader height="594px"/>
     );
   }
 
   return (
     <section className="px-6 max-w-6xl mx-auto py-8 min-h-[594px]">
       {/* Top Bar with Filter and Button */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div className="flex flex-col md:flex-row md:items-center items-start md:justify-between gap-4 mb-8">
         {/* Filter Tabs */}
-        <div className="w-fit flex items-center flex-wrap gap-2 bg-gray-100 px-2 py-1 rounded-lg">
+        <div className="w-fit flex items-center flex-wrap gap-2 bg-background px-2 py-1 rounded-lg">
           {(["all", "ongoing", "completed", "upcoming"] as const).map(
             (filter) => (
               <button
@@ -104,6 +100,9 @@ export default function ProjectsSection() {
         </div>
 
         {/* View All Button */}
+        <div>
+          
+        </div>
         {filteredProjects.length > 0 && (
           <SlantedButton
             text="View Projects"

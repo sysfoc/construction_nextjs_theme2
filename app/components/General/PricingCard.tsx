@@ -19,40 +19,56 @@ export default function PricingCard({
   imageSrc,
 }: PricingCardProps) {
   return (
-    <div className="w-[280px] sm:w-[300px] bg-[var(--color-background)] rounded-xl overflow-hidden shadow-lg border border-[var(--color-border)] flex flex-col">
+    <div className="group w-[280px] sm:w-[300px] bg-[var(--color-background)] rounded-2xl overflow-hidden shadow-lg border-2 border-[var(--color-border)] hover:border-[var(--color-primary)] hover:shadow-2xl transition-all duration-300 flex flex-col relative">
       
-      {/* Top Label Ribbon */}
-      <div className="bg-[var(--color-primary)] text-[var(--color-background)] text-xs font-semibold px-4 py-1 self-start rounded-br-xl">
-        {topLabel}
-      </div>
+      {/* Decorative Top Bar */}
+      <div className="h-1.5 bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary)]/70 to-[var(--color-primary)]"></div>
 
-      {/* Price & Billing Info */}
-      <div className="p-5 flex flex-col gap-2">
-        <div className="flex items-end gap-2">
-          <span className="text-4xl font-bold text-[var(--color-foreground)]">{price}</span>
-          <span className="text-sm text-[var(--color-paragraph)] leading-tight">{billingInfo}</span>
+      {/* Content Section */}
+      <div className="p-5 flex flex-col gap-3 relative z-10">
+        
+        {/* Label Badge */}
+        <div className="inline-flex items-center gap-2 bg-[var(--color-primary)]/10 px-3 py-1.5 rounded-lg self-start">
+          <div className="w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full"></div>
+          <span className="text-[var(--color-primary)] text-[10px] font-bold uppercase tracking-wide">
+            {topLabel}
+          </span>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-[var(--color-border)]" />
+        {/* Price Display */}
+        <div className="flex items-baseline gap-2 mb-1">
+          <span className="text-4xl font-black text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors">
+            {price}
+          </span>
+          <span className="text-xs text-[var(--color-paragraph)] leading-tight">
+            {billingInfo}
+          </span>
+        </div>
 
-        {/* Description */}
-        <p className="text-sm text-[var(--color-paragraph)] leading-snug">{description}</p>
+        {/* Description with Icon */}
+        <div className="bg-[var(--color-header-background)] rounded-lg p-3 border-l-4 border-[var(--color-primary)]">
+          <p className="text-xs text-[var(--color-paragraph)] leading-relaxed">
+            {description}
+          </p>
+        </div>
 
         {/* Button */}
-        <div className="mt-3">
-          <SlantedButton text="GET STARTED" onClick={() => console.log(`${topLabel} plan clicked`)} />
+        <div className="mt-2">
+          <SlantedButton 
+            text="GET STARTED" 
+            onClick={() => console.log(`${topLabel} plan clicked`)} 
+          />
         </div>
       </div>
 
-      {/* Bottom Image */}
-      <div className="w-full h-60 relative mt-auto">
+      {/* Image Section with Overlay */}
+      <div className="relative w-full h-48 mt-auto overflow-hidden">
         <Image
           src={imageSrc}
           alt="Pricing illustration"
           fill
-          className="object-cover"
-        />
+          className="object-cover group-hover:scale-110 transition-transform duration-500"
+        />        
       </div>
     </div>
   );
