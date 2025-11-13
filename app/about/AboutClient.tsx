@@ -5,6 +5,7 @@ import { isPageVisible } from "@/lib/api/pageVisibility";
 import AboutHeroSection from "@/app/components/User/about/AboutHeroSection";
 import WhatWeDoSection from "@/app/components/User/about/WhatWeDoSection";
 import ServicesAndTeamSection from "@/app/components/User/about/ServicesAndTeamSection";
+import Loader from "../components/General/Loader";
 
 export default function AboutPage() {
   const [aboutData, setAboutData] = useState<any>(null);
@@ -39,8 +40,8 @@ export default function AboutPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <p className="text-gray-500">Loading...</p>
+      <div className="flex items-start mt-20 justify-center min-h-screen">
+        <Loader />
       </div>
     );
   }

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import HeroSectionForm from "@/app/admin/components/about/HeroSectionForm";
 import WhatWeDoForm from "@/app/admin/components/about/WhatWeDoForm";
 import ServicesForm from "@/app/admin/components/about/ServicesForm";
+import Loader from "@/app/components/General/Loader";
 
 interface AboutPageData {
   _id?: string;
@@ -84,10 +85,7 @@ export default function AboutManagementPage() {
   if (loading)
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
+        <Loader/>
       </div>
     );
 

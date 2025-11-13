@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import CategoryList from "../components/gallery/category-list"
 import ImageUploadForm from "../components/gallery/image-upload-form"
 import ImageGrid from "../components/gallery/image-grid"
+import Loader from "@/app/components/General/Loader"
 
 interface GalleryCategory {
   _id: string
@@ -167,8 +168,8 @@ export default function GalleryManagementPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-background flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

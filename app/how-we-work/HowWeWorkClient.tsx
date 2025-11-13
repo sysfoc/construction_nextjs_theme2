@@ -6,6 +6,7 @@ import type { HowWeWorkData } from "@/lib/models/HowWeWork";
 import { useEffect, useState } from "react";
 import { isPageVisible } from "@/lib/api/pageVisibility";
 import { useRouter } from "next/navigation";
+import Loader from "../components/General/Loader";
 
 export default function HowWeWorkPage() {
   const [steps, setSteps] = useState<HowWeWorkData[]>([]);
@@ -47,8 +48,8 @@ export default function HowWeWorkPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex items-start mt-20 justify-center min-h-screen">
+              <Loader/>
       </div>
     );
   }

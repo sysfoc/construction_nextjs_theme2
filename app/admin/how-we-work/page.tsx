@@ -4,6 +4,7 @@ import { Save, Plus, Trash2, Edit2, X, Upload } from "lucide-react"
 import Image from "next/image"
 import { useState, type ChangeEvent, useEffect } from "react"
 import type { HowWeWorkData } from "@/lib/models/HowWeWork"
+import Loader from "@/app/components/General/Loader"
 
 interface FormData {
   title: string
@@ -145,8 +146,8 @@ export default function HowWeWorkManagementPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-background flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

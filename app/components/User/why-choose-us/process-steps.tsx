@@ -3,6 +3,7 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import Loader from "../../General/Loader"
 
 interface Step {
   _id: string
@@ -101,8 +102,8 @@ export const ProcessSteps: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="w-full bg-[var(--background)] py-20 px-4">
-        <div className="max-w-7xl mx-auto text-center text-[var(--paragraph-color)]">Loading...</div>
+      <div className="flex items-start mt-20 justify-center min-h-screen">
+              <Loader/>
       </div>
     )
   }

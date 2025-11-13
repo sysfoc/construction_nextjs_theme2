@@ -1,4 +1,5 @@
 "use client"
+import Loader from "@/app/components/General/Loader"
 import { Save, Search } from "lucide-react"
 import type React from "react"
 
@@ -130,7 +131,9 @@ export default function SEOSettingsPage() {
           </div>
 
           {loading ? (
-            <p className="text-gray-500">Loading metadata...</p>
+            <div className="flex items-start mt-20 justify-center min-h-screen">
+        <Loader/>
+      </div>
           ) : (
             <>
               <div>

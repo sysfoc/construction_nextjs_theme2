@@ -4,6 +4,7 @@ import type React from "react"
 
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import Loader from "@/app/components/General/Loader"
 
 interface TeamMember {
   id: string
@@ -153,8 +154,8 @@ export default function TeamManagementPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-background flex items-center justify-center">
-        <p className="text-gray-600">Loading team members...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

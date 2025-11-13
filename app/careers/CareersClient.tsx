@@ -1,21 +1,22 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import { MapPin, Calendar, DollarSign, ArrowRight } from "lucide-react"
-import { useRouter } from "next/navigation"
+import type React from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { MapPin, Calendar, DollarSign, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { isPageVisible } from "@/lib/api/pageVisibility";
+import Loader from "../components/General/Loader";
 
 interface Job {
-  id: string
-  image: string | null
-  title: string
-  location: string
-  deadline: string
-  payRange: string
-  description: string
-  jobType: string
+  id: string;
+  image: string | null;
+  title: string;
+  location: string;
+  deadline: string;
+  payRange: string;
+  description: string;
+  jobType: string;
 }
 
 const CareerCard: React.FC<Job & { onApply: (title: string) => void }> = ({
@@ -54,7 +55,12 @@ const CareerCard: React.FC<Job & { onApply: (title: string) => void }> = ({
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 border-[var(--primary)]/20">
               {image ? (
-                <Image src={image || "/placeholder.svg"} alt={title} fill className="object-cover" />
+                <Image
+                  src={image || "/placeholder.svg"}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                />
               ) : (
                 <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <span className="text-xs text-gray-400">No Image</span>
@@ -81,19 +87,25 @@ const CareerCard: React.FC<Job & { onApply: (title: string) => void }> = ({
             <div className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center flex-shrink-0">
               <MapPin className="w-4 h-4 text-[var(--primary)]" />
             </div>
-            <span className="text-[var(--paragraph-color)] dark:text-gray-400">{location}</span>
+            <span className="text-[var(--paragraph-color)] dark:text-gray-400">
+              {location}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <div className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center flex-shrink-0">
               <Calendar className="w-4 h-4 text-[var(--primary)]" />
             </div>
-            <span className="text-[var(--paragraph-color)] dark:text-gray-400">{deadline}</span>
+            <span className="text-[var(--paragraph-color)] dark:text-gray-400">
+              {deadline}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <div className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center flex-shrink-0">
               <DollarSign className="w-4 h-4 text-[var(--primary)]" />
             </div>
-            <span className="text-[var(--paragraph-color)] dark:text-gray-400 font-medium">{payRange}</span>
+            <span className="text-[var(--paragraph-color)] dark:text-gray-400 font-medium">
+              {payRange}
+            </span>
           </div>
         </div>
 
@@ -112,48 +124,47 @@ const CareerCard: React.FC<Job & { onApply: (title: string) => void }> = ({
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const CareersClient: React.FC = () => {
-  const [jobs, setJobs] = useState<Job[]>([])
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    fetchJobs()
-  }, [])
+    fetchJobs();
+  }, []);
 
   const fetchJobs = async () => {
     try {
-      setLoading(true)
-      const response = await fetch("/api/careers")
-      const data = await response.json()
-      setJobs(data.jobs || [])
+      setLoading(true);
+      const response = await fetch("/api/careers");
+      const data = await response.json();
+      setJobs(data.jobs || []);
     } catch (error) {
-      console.error("Error fetching jobs:", error)
+      console.error("Error fetching jobs:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleApply = (jobTitle: string) => {
-    router.push(`/jobs/apply?position=${encodeURIComponent(jobTitle)}`)
-  }
+    router.push(`/jobs/apply?position=${encodeURIComponent(jobTitle)}`);
+  };
 
   return (
     <div className="min-h-screen bg-[var(--background)] dark:bg-gray-950 p-4 py-10 lg:px-16 transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="text-center">
-              <div className="w-12 h-12 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">Loading opportunities...</p>
-            </div>
+          <div className="flex items-start mt-20 justify-center min-h-screen">
+            <Loader />
           </div>
         ) : jobs.length === 0 ? (
           <div className="flex items-center justify-center py-12">
-            <p className="text-gray-600 dark:text-gray-400">No job openings available at the moment.</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              No job openings available at the moment.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -164,7 +175,7 @@ const CareersClient: React.FC = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CareersClient
+export default CareersClient;

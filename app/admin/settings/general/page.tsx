@@ -25,6 +25,7 @@ import type React from "react"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import type { SocialLink } from "@/lib/models/GeneralSettings"
+import Loader from "@/app/components/General/Loader"
 
 const SOCIAL_PLATFORMS = [
   { name: "facebook", label: "Facebook", icon: Facebook, color: "text-blue-600" },
@@ -150,8 +151,8 @@ const handleSocialLinkChange = (platform: string, url: string) => {
 
   if (loading) {
     return (
-      <div className="p-4 mx-auto bg-background min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Loading settings...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

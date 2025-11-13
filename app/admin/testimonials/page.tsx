@@ -1,4 +1,5 @@
 "use client"
+import Loader from "@/app/components/General/Loader"
 import { Save, Plus, Trash2, Edit2, X, User, Star, Briefcase, Building2, MapPin, Calendar } from "lucide-react"
 import type React from "react"
 
@@ -206,9 +207,9 @@ export default function TestimonialManagementPage() {
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
-            <p className="text-[var(--paragraph-color)]">Loading testimonials...</p>
-          </div>
+          <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
+      </div>
         ) : (
           <div className="space-y-3 sm:space-y-4">
             {isAddingNew && (

@@ -1,4 +1,5 @@
 "use client"
+import Loader from "@/app/components/General/Loader"
 import { Save, Plus, Trash2, Edit2, X } from "lucide-react"
 import type React from "react"
 
@@ -132,7 +133,11 @@ export default function FAQManagementPage() {
   }
 
   if (loading) {
-    return <div className="p-4 text-center">Loading FAQs...</div>
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
+      </div>
+    )
   }
 
   return (

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Trash2, Reply } from "lucide-react"
 import ReplyModal from "@/app/admin/components/quote-reply/reply-modal"
+import Loader from "@/app/components/General/Loader"
 
 interface Quote {
   _id: string
@@ -159,7 +160,9 @@ export default function QuoteManagement() {
 
         {/* Quotes List */}
         {loading ? (
-          <div className="text-center py-8 text-gray-500">Loading...</div>
+          <div className="flex items-start mt-20 justify-center min-h-screen">
+        <Loader/>
+      </div>
         ) : filteredQuotes.length === 0 ? (
           <div className="text-center py-8 text-gray-500">No quotes found</div>
         ) : (

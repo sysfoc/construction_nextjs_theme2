@@ -1,4 +1,5 @@
 "use client"
+import Loader from "@/app/components/General/Loader"
 import { Save, Trash2, Edit2, X, Upload, Plus } from "lucide-react"
 import { useState, type ChangeEvent, useEffect } from "react"
 
@@ -188,8 +189,8 @@ export default function PartnersManagementPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-background flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

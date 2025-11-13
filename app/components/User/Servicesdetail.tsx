@@ -127,14 +127,14 @@ export default function ConstructionSection(): React.JSX.Element {
             {/* Stats */}
             <div className="flex gap-4">
               {currentContent.stats.map((stat, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <div className="w-8 h-8 flex items-center justify-center rounded">
+                <div key={i} className="flex items-center gap-1">
+                  <div className="w-10 h-10 flex items-center justify-center rounded">
                     <Image
                       src={`/serviceDetail/serviceDetail_0${i + 1}.png`}
                       alt={stat.label}
-                      width={32}
-                      height={32}
-                      className="object-contain"
+                      width={40}
+                      height={40}
+                      className="object-contain flex-shrink-0"
                     />
                   </div>
                   <div className="flex flex-col">

@@ -5,6 +5,7 @@ import NewsSearchList from "../components/General/news-search-list";
 import type { NewsArticle } from "@/lib/models/News";
 import { isPageVisible } from "@/lib/api/pageVisibility";
 import { useRouter } from "next/navigation";
+import Loader from "../components/General/Loader";
 
 export default function NewsClient() {
   const [items, setItems] = useState<NewsArticle[]>([]);
@@ -53,7 +54,9 @@ export default function NewsClient() {
 
           <div className="mt-3">
             {loading ? (
-              <p className="text-muted-foreground">Loading news...</p>
+              <div className="flex items-start mt-20 justify-center min-h-screen">
+                <Loader />
+              </div>
             ) : (
               <NewsSearchList items={items} />
             )}

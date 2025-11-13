@@ -1,66 +1,62 @@
-"use client"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { isPageVisible } from "@/lib/api/pageVisibility"
-import { Shield } from "lucide-react"
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { isPageVisible } from "@/lib/api/pageVisibility";
+import { Shield } from "lucide-react";
+import Loader from "../components/General/Loader";
 
 interface PrivacyPolicy {
-  _id: string
-  title: string
-  content: string
-  lastUpdated: string
+  _id: string;
+  title: string;
+  content: string;
+  lastUpdated: string;
 }
 
 export default function PrivacyPolicyPage() {
-  const [privacyPolicy, setPrivacyPolicy] = useState<PrivacyPolicy | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [isVisible, setIsVisible] = useState(true)
-  const router = useRouter()
+  const [privacyPolicy, setPrivacyPolicy] = useState<PrivacyPolicy | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const checkVisibility = async () => {
-      const visible = await isPageVisible("privacy-policy")
-      setIsVisible(visible)
+      const visible = await isPageVisible("privacy-policy");
+      setIsVisible(visible);
       if (!visible) {
-        router.push("/not-found")
+        router.push("/not-found");
       }
-    }
-    checkVisibility()
-  }, [router])
+    };
+    checkVisibility();
+  }, [router]);
 
   useEffect(() => {
     const fetchPrivacyPolicy = async () => {
       try {
-        const response = await fetch("/api/privacy-policy")
-        const data = await response.json()
-        setPrivacyPolicy(data)
+        const response = await fetch("/api/privacy-policy");
+        const data = await response.json();
+        setPrivacyPolicy(data);
       } catch (error) {
-        console.error("Error fetching privacy policy:", error)
+        console.error("Error fetching privacy policy:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchPrivacyPolicy()
-  }, [])
+    fetchPrivacyPolicy();
+  }, []);
 
   if (!isVisible) {
-    return null
+    return null;
   }
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-background px-6 py-12">
-        <section className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-              <p className="text-gray-600 text-sm">Loading privacy policy...</p>
-            </div>
-          </div>
-        </section>
-      </main>
-    )
+      <div className="flex items-start mt-20 justify-center min-h-screen">
+        <Loader />
+      </div>
+    );
   }
 
   return (
@@ -76,7 +72,8 @@ export default function PrivacyPolicyPage() {
           </div>
           {privacyPolicy && (
             <p className="text-sm text-gray-500">
-              Last updated: {new Date(privacyPolicy.lastUpdated).toLocaleDateString()}
+              Last updated:{" "}
+              {new Date(privacyPolicy.lastUpdated).toLocaleDateString()}
             </p>
           )}
         </div>
@@ -93,10 +90,12 @@ export default function PrivacyPolicyPage() {
           </div>
         ) : (
           <div className="bg-card border border-border rounded-lg p-6 text-center">
-            <p className="text-gray-500">No privacy policy available at this time.</p>
+            <p className="text-gray-500">
+              No privacy policy available at this time.
+            </p>
           </div>
         )}
       </section>
     </main>
-  )
+  );
 }

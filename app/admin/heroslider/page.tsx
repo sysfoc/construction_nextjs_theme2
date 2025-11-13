@@ -4,6 +4,7 @@ import type React from "react"
 
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import Loader from "@/app/components/General/Loader"
 
 interface Slide {
   id: string
@@ -165,8 +166,8 @@ export default function HeroSliderPage() {
 
   if (loading) {
     return (
-      <div className="p-6 max-w-5xl mx-auto bg-background min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

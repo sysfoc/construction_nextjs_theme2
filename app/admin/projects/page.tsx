@@ -5,6 +5,7 @@ import type React from "react"
 import { Save, Plus, Trash2, Edit2, X, Upload } from "lucide-react"
 import { useState, useEffect } from "react"
 import type { ProjectData } from "@/lib/models/Project"
+import Loader from "@/app/components/General/Loader"
 
 interface FormData {
   title: string
@@ -196,8 +197,8 @@ export default function ProjectsManagementPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-background flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

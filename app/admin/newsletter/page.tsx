@@ -1,101 +1,109 @@
 // app/admin/newsletter/page.tsx
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { StatsCards } from "@/app/admin/components/newsletter/stats-cards"
-import { SubscribersList } from "@/app/admin/components/newsletter/subscribers-list"
-import { NewsletterForm } from "@/app/admin/components/newsletter/newsletter-form"
-import { NewslettersList } from "@/app/admin/components/newsletter/newsletters-list"
+import { useState, useEffect } from "react";
+import { StatsCards } from "@/app/admin/components/newsletter/stats-cards";
+import { SubscribersList } from "@/app/admin/components/newsletter/subscribers-list";
+import { NewsletterForm } from "@/app/admin/components/newsletter/newsletter-form";
+import { NewslettersList } from "@/app/admin/components/newsletter/newsletters-list";
+import Loader from "@/app/components/General/Loader";
 
 interface Subscriber {
-  _id: string
-  email: string
-  status: "active" | "inactive"
-  createdAt: string
+  _id: string;
+  email: string;
+  status: "active" | "inactive";
+  createdAt: string;
 }
 
 interface Newsletter {
-  _id: string
-  subject: string
-  content: string
-  sentAt: string
-  recipientCount: number 
+  _id: string;
+  subject: string;
+  content: string;
+  sentAt: string;
+  recipientCount: number;
 }
 
 export default function NewsletterManagementPage() {
-  const [subscribers, setSubscribers] = useState<Subscriber[]>([])
-  const [newsletters, setNewsletters] = useState<Newsletter[]>([])
-  const [activeTab, setActiveTab] = useState<"subscribers" | "newsletters">("subscribers")
-  const [showNewsletterForm, setShowNewsletterForm] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all")
-  const [isLoading, setIsLoading] = useState(true)
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+  const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
+  const [activeTab, setActiveTab] = useState<"subscribers" | "newsletters">(
+    "subscribers"
+  );
+  const [showNewsletterForm, setShowNewsletterForm] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "active" | "inactive"
+  >("all");
+  const [isLoading, setIsLoading] = useState(true);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   // Fetch subscribers
   const fetchSubscribers = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const params = new URLSearchParams()
-      if (statusFilter !== "all") params.append("status", statusFilter)
-      if (searchQuery) params.append("search", searchQuery)
+      const params = new URLSearchParams();
+      if (statusFilter !== "all") params.append("status", statusFilter);
+      if (searchQuery) params.append("search", searchQuery);
 
-      const response = await fetch(`/api/subscribers?${params}`)
-      if (!response.ok) throw new Error("Failed to fetch subscribers")
-      const data = await response.json()
-      setSubscribers(data)
+      const response = await fetch(`/api/subscribers?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch subscribers");
+      const data = await response.json();
+      setSubscribers(data);
     } catch (error) {
-      console.error("Error fetching subscribers:", error)
-      setMessage({ type: "error", text: "Failed to fetch subscribers" })
+      console.error("Error fetching subscribers:", error);
+      setMessage({ type: "error", text: "Failed to fetch subscribers" });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   // Fetch newsletters
   const fetchNewsletters = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const response = await fetch("/api/newsletters")
-      if (!response.ok) throw new Error("Failed to fetch newsletters")
-      const data = await response.json()
-      setNewsletters(data)
+      const response = await fetch("/api/newsletters");
+      if (!response.ok) throw new Error("Failed to fetch newsletters");
+      const data = await response.json();
+      setNewsletters(data);
     } catch (error) {
-      console.error("Error fetching newsletters:", error)
-      setMessage({ type: "error", text: "Failed to fetch newsletters" })
+      console.error("Error fetching newsletters:", error);
+      setMessage({ type: "error", text: "Failed to fetch newsletters" });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   // Initial fetch
   useEffect(() => {
-    fetchSubscribers()
-  }, [])
+    fetchSubscribers();
+  }, []);
 
   // Fetch based on active tab
   useEffect(() => {
     if (activeTab === "newsletters") {
-      fetchNewsletters()
+      fetchNewsletters();
     } else {
-      fetchSubscribers()
+      fetchSubscribers();
     }
-  }, [activeTab])
+  }, [activeTab]);
 
   // Refetch when filters change
   useEffect(() => {
     if (activeTab === "subscribers") {
-      fetchSubscribers()
+      fetchSubscribers();
     }
-  }, [statusFilter, searchQuery])
+  }, [statusFilter, searchQuery]);
 
   // Clear message after 3 seconds
   useEffect(() => {
     if (message) {
-      const timer = setTimeout(() => setMessage(null), 3000)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setMessage(null), 3000);
+      return () => clearTimeout(timer);
     }
-  }, [message])
+  }, [message]);
 
   const handleUpdateSubscriber = async (id: string, status: string) => {
     try {
@@ -103,31 +111,31 @@ export default function NewsletterManagementPage() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
-      })
+      });
 
-      if (!response.ok) throw new Error("Failed to update subscriber")
-      setMessage({ type: "success", text: "Subscriber updated successfully" })
-      fetchSubscribers()
+      if (!response.ok) throw new Error("Failed to update subscriber");
+      setMessage({ type: "success", text: "Subscriber updated successfully" });
+      fetchSubscribers();
     } catch (error) {
-      console.error("Error updating subscriber:", error)
-      setMessage({ type: "error", text: "Failed to update subscriber" })
+      console.error("Error updating subscriber:", error);
+      setMessage({ type: "error", text: "Failed to update subscriber" });
     }
-  }
+  };
 
   const handleDeleteSubscriber = async (id: string) => {
     try {
       const response = await fetch(`/api/subscribers?id=${id}`, {
         method: "DELETE",
-      })
+      });
 
-      if (!response.ok) throw new Error("Failed to delete subscriber")
-      setMessage({ type: "success", text: "Subscriber deleted successfully" })
-      fetchSubscribers()
+      if (!response.ok) throw new Error("Failed to delete subscriber");
+      setMessage({ type: "success", text: "Subscriber deleted successfully" });
+      fetchSubscribers();
     } catch (error) {
-      console.error("Error deleting subscriber:", error)
-      setMessage({ type: "error", text: "Failed to delete subscriber" })
+      console.error("Error deleting subscriber:", error);
+      setMessage({ type: "error", text: "Failed to delete subscriber" });
     }
-  }
+  };
 
   const handleSendNewsletter = async (subject: string, content: string) => {
     try {
@@ -135,36 +143,38 @@ export default function NewsletterManagementPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ subject, content }),
-      })
+      });
 
-      if (!response.ok) throw new Error("Failed to send newsletter")
-      setMessage({ type: "success", text: "Newsletter sent successfully" })
-      setShowNewsletterForm(false)
-      fetchSubscribers()
-      fetchNewsletters()
+      if (!response.ok) throw new Error("Failed to send newsletter");
+      setMessage({ type: "success", text: "Newsletter sent successfully" });
+      setShowNewsletterForm(false);
+      fetchSubscribers();
+      fetchNewsletters();
     } catch (error) {
-      console.error("Error sending newsletter:", error)
-      setMessage({ type: "error", text: "Failed to send newsletter" })
-      throw error
+      console.error("Error sending newsletter:", error);
+      setMessage({ type: "error", text: "Failed to send newsletter" });
+      throw error;
     }
-  }
+  };
 
   const handleDeleteNewsletter = async (id: string) => {
     try {
       const response = await fetch(`/api/newsletters/${id}`, {
         method: "DELETE",
-      })
+      });
 
-      if (!response.ok) throw new Error("Failed to delete newsletter")
-      setMessage({ type: "success", text: "Newsletter deleted successfully" })
-      fetchNewsletters()
+      if (!response.ok) throw new Error("Failed to delete newsletter");
+      setMessage({ type: "success", text: "Newsletter deleted successfully" });
+      fetchNewsletters();
     } catch (error) {
-      console.error("Error deleting newsletter:", error)
-      setMessage({ type: "error", text: "Failed to delete newsletter" })
+      console.error("Error deleting newsletter:", error);
+      setMessage({ type: "error", text: "Failed to delete newsletter" });
     }
-  }
+  };
 
-  const activeSubscribersCount = subscribers.filter((s) => s.status === "active").length
+  const activeSubscribersCount = subscribers.filter(
+    (s) => s.status === "active"
+  ).length;
 
   return (
     <div className="w-full min-h-screen bg-background overflow-x-hidden">
@@ -200,14 +210,19 @@ export default function NewsletterManagementPage() {
         )}
 
         {/* Stats Cards */}
-        <StatsCards totalSubscribers={subscribers.length} activeSubscribers={activeSubscribersCount} />
+        <StatsCards
+          totalSubscribers={subscribers.length}
+          activeSubscribers={activeSubscribersCount}
+        />
 
         {/* Tabs */}
         <div className="flex gap-2 mb-4 border-b border-[var(--border-color)]">
           <button
             onClick={() => setActiveTab("subscribers")}
             className={`px-4 py-2 text-sm sm:text-base font-medium ${
-              activeTab === "subscribers" ? "border-b-2 border-[var(--primary)] text-[var(--primary)]" : "text-gray-500"
+              activeTab === "subscribers"
+                ? "border-b-2 border-[var(--primary)] text-[var(--primary)]"
+                : "text-gray-500"
             }`}
           >
             Subscribers
@@ -215,7 +230,9 @@ export default function NewsletterManagementPage() {
           <button
             onClick={() => setActiveTab("newsletters")}
             className={`px-4 py-2 text-sm sm:text-base font-medium ${
-              activeTab === "newsletters" ? "border-b-2 border-[var(--primary)] text-[var(--primary)]" : "text-gray-500"
+              activeTab === "newsletters"
+                ? "border-b-2 border-[var(--primary)] text-[var(--primary)]"
+                : "text-gray-500"
             }`}
           >
             Newsletters
@@ -235,17 +252,29 @@ export default function NewsletterManagementPage() {
               />
               <select
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as "all" | "active" | "inactive")}
+                onChange={(e) =>
+                  setStatusFilter(
+                    e.target.value as "all" | "active" | "inactive"
+                  )
+                }
                 className="px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm"
               >
-                <option className="bg-background" value="all">All</option>
-                <option className="bg-background" value="active">Active</option>
-                <option className="bg-background" value="inactive">Inactive</option>
+                <option className="bg-background" value="all">
+                  All
+                </option>
+                <option className="bg-background" value="active">
+                  Active
+                </option>
+                <option className="bg-background" value="inactive">
+                  Inactive
+                </option>
               </select>
             </div>
 
             {isLoading ? (
-              <div className="text-center py-8 text-gray-500">Loading subscribers...</div>
+              <div className="flex items-start mt-20 justify-center min-h-screen">
+                <Loader />
+              </div>
             ) : subscribers.length > 0 ? (
               <SubscribersList
                 subscribers={subscribers}
@@ -253,7 +282,9 @@ export default function NewsletterManagementPage() {
                 onDelete={handleDeleteSubscriber}
               />
             ) : (
-              <div className="text-center py-8 text-gray-500">No subscribers found</div>
+              <div className="text-center py-8 text-gray-500">
+                No subscribers found
+              </div>
             )}
           </div>
         )}
@@ -271,12 +302,18 @@ export default function NewsletterManagementPage() {
             {!showNewsletterForm && (
               <>
                 {isLoading ? (
-                  <div className="text-center py-8 text-gray-500">Loading newsletters...</div>
+                  <div className="flex items-start mt-20 justify-center min-h-screen">
+                    <Loader />
+                  </div>
                 ) : newsletters.length > 0 ? (
-                  <NewslettersList newsletters={newsletters} onDelete={handleDeleteNewsletter} />
+                  <NewslettersList
+                    newsletters={newsletters}
+                    onDelete={handleDeleteNewsletter}
+                  />
                 ) : (
                   <div className="text-center py-8 text-gray-500">
-                    No newsletters sent yet. Click "New Newsletter" to create one.
+                    No newsletters sent yet. Click "New Newsletter" to create
+                    one.
                   </div>
                 )}
               </>
@@ -285,5 +322,5 @@ export default function NewsletterManagementPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

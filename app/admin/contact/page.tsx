@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Trash2, Mail } from "lucide-react";
+import Loader from "@/app/components/General/Loader";
 
 interface ContactMessage {
   _id: string;
@@ -150,8 +151,8 @@ export default function ContactManagement() {
 
         {/* Messages List */}
         {loading ? (
-          <div className="text-center py-6 text-sm text-gray-500">
-            Loading...
+          <div className="flex mt-20 items-start justify-center min-h-screen">
+            <Loader />
           </div>
         ) : filteredMessages.length === 0 ? (
           <div className="text-center py-6 text-sm text-gray-500">

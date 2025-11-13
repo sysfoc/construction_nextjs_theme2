@@ -5,6 +5,7 @@ import { Search } from "lucide-react"
 import { ApplicationCard } from "@/app/admin/components/job-applications/application-card"
 import { ApplicationDetailModal } from "@/app/admin/components/job-applications/application-detail-modal"
 import { StatusTabs } from "@/app/admin/components/job-applications/status-tabs"
+import Loader from "@/app/components/General/Loader"
 
 interface JobApplication {
   id: string
@@ -115,8 +116,8 @@ export default function JobApplicationsPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-[var(--background)] dark:bg-gray-950 flex items-center justify-center">
-        <p className="text-[var(--paragraph-color)]">Loading applications...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

@@ -2,6 +2,7 @@
 import { Save } from "lucide-react"
 import { useState, useEffect, type ChangeEvent } from "react"
 import dynamic from "next/dynamic";
+import Loader from "@/app/components/General/Loader";
 
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 interface TermsAndConditions {
@@ -76,8 +77,8 @@ export default function TermsAndConditionsManagementPage() {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-background flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

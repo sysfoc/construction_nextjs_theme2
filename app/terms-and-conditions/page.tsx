@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { isPageVisible } from "@/lib/api/pageVisibility"
 import { FileText } from "lucide-react"
+import Loader from "../components/General/Loader"
 
 interface TermsAndConditions {
   _id: string
@@ -50,16 +51,9 @@ export default function TermsAndConditionsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-background px-6 py-12">
-        <section className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-              <p className="text-gray-600 text-sm">Loading terms and conditions...</p>
-            </div>
-          </div>
-        </section>
-      </main>
+      <div className="flex items-start mt-20 justify-center min-h-screen">
+              <Loader/>
+      </div>
     )
   }
 

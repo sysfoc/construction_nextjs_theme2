@@ -35,7 +35,7 @@ const BlogCards: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full py-10 px-4 min-h-[436px]">
+    <div className="w-full py-10 px-4 min-h-[450px]">
       {/* View All Blogs */}
       <div className="mb-6 flex justify-end">
         <SlantedButton text="View all Blogs" onClick={() => router.push("/blogs")} />

@@ -1,86 +1,91 @@
-"use client"
-import { Save, Plus, Trash2, Edit2, X, Upload } from "lucide-react"
-import Image from "next/image"
-import { useState, type ChangeEvent, useEffect } from "react"
+"use client";
+import Loader from "@/app/components/General/Loader";
+import { Save, Plus, Trash2, Edit2, X, Upload } from "lucide-react";
+import Image from "next/image";
+import { useState, type ChangeEvent, useEffect } from "react";
 
 interface Certification {
-  _id: string
-  title: string
-  description: string
-  image: string | null
-  order: number
+  _id: string;
+  title: string;
+  description: string;
+  image: string | null;
+  order: number;
 }
 
 interface FormData {
-  title: string
-  description: string
-  imagePreview: string | null
+  title: string;
+  description: string;
+  imagePreview: string | null;
 }
 
 export default function CertificationsManagementPage() {
-  const [certifications, setCertifications] = useState<Certification[]>([])
-  const [loading, setLoading] = useState(true)
-  const [editingCertification, setEditingCertification] = useState<string | null>(null)
-  const [isAddingNew, setIsAddingNew] = useState(false)
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editingCertification, setEditingCertification] = useState<
+    string | null
+  >(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
     imagePreview: null,
-  })
+  });
 
   useEffect(() => {
     const fetchCertifications = async () => {
       try {
-        const response = await fetch("/api/certifications")
-        const data = await response.json()
-        setCertifications(data)
+        const response = await fetch("/api/certifications");
+        const data = await response.json();
+        setCertifications(data);
       } catch (error) {
-        console.error("Error fetching certifications:", error)
+        console.error("Error fetching certifications:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchCertifications()
-  }, [])
+    fetchCertifications();
+  }, []);
 
   const handleEdit = (certification: Certification) => {
-    setEditingCertification(certification._id)
+    setEditingCertification(certification._id);
     setFormData({
       title: certification.title,
       description: certification.description,
       imagePreview: certification.image,
-    })
-  }
+    });
+  };
 
   const handleCancel = () => {
-    setEditingCertification(null)
-    setIsAddingNew(false)
+    setEditingCertification(null);
+    setIsAddingNew(false);
     setFormData({
       title: "",
       description: "",
       imagePreview: null,
-    })
-  }
+    });
+  };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prev) => ({
           ...prev,
           imagePreview: reader.result as string,
-        }))
-      }
-      reader.readAsDataURL(file)
+        }));
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleSaveCertification = async () => {
     try {
@@ -93,64 +98,73 @@ export default function CertificationsManagementPage() {
             description: formData.description,
             image: formData.imagePreview,
           }),
-        })
+        });
 
         if (response.ok) {
-          const newCert = await response.json()
-          setCertifications((prev) => [newCert, ...prev])
-          handleCancel()
+          const newCert = await response.json();
+          setCertifications((prev) => [newCert, ...prev]);
+          handleCancel();
         }
       } else if (editingCertification) {
-        const response = await fetch(`/api/certifications/${editingCertification}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: formData.title,
-            description: formData.description,
-            image: formData.imagePreview,
-          }),
-        })
+        const response = await fetch(
+          `/api/certifications/${editingCertification}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: formData.title,
+              description: formData.description,
+              image: formData.imagePreview,
+            }),
+          }
+        );
 
         if (response.ok) {
-          const updated = await response.json()
-          setCertifications((prev) => prev.map((cert) => (cert._id === editingCertification ? updated : cert)))
-          handleCancel()
+          const updated = await response.json();
+          setCertifications((prev) =>
+            prev.map((cert) =>
+              cert._id === editingCertification ? updated : cert
+            )
+          );
+          handleCancel();
         }
       }
     } catch (error) {
-      console.error("Error saving certification:", error)
+      console.error("Error saving certification:", error);
     }
-  }
+  };
 
   const handleAddCertification = () => {
-    setIsAddingNew(true)
+    setIsAddingNew(true);
     setFormData({
       title: "",
       description: "",
       imagePreview: null,
-    })
-  }
+    });
+  };
 
   const handleDeleteCertification = async (id: string) => {
     try {
       const response = await fetch(`/api/certifications/${id}`, {
         method: "DELETE",
-      })
+      });
 
       if (response.ok) {
-        setCertifications((prev) => prev.filter((certification) => certification._id !== id))
+        setCertifications((prev) =>
+          prev.filter((certification) => certification._id !== id)
+        );
       }
     } catch (error) {
-      console.error("Error deleting certification:", error)
+      console.error("Error deleting certification:", error);
     }
-  }
+  };
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-background flex items-center justify-center">
-        <p className="text-gray-500">Loading certifications...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader />
       </div>
-    )
+    );
   }
 
   return (
@@ -177,13 +191,18 @@ export default function CertificationsManagementPage() {
                   <h3 className="text-base sm:text-lg font-semibold text-[var(--header-text)]">
                     Add New Certification
                   </h3>
-                  <button onClick={handleCancel} className="text-gray-500 flex-shrink-0">
+                  <button
+                    onClick={handleCancel}
+                    className="text-gray-500 flex-shrink-0"
+                  >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
                 <div className="w-full">
-                  <label className="block text-xs sm:text-sm text-[var(--header-text)] mb-2">Certification Image</label>
+                  <label className="block text-xs sm:text-sm text-[var(--header-text)] mb-2">
+                    Certification Image
+                  </label>
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div className="w-28 h-28 sm:w-32 sm:h-32 border-2 border-dashed border-[var(--border-color)] rounded flex items-center justify-center flex-shrink-0 relative">
                       {formData.imagePreview ? (
@@ -204,13 +223,17 @@ export default function CertificationsManagementPage() {
                         onChange={handleImageChange}
                         className="block text-xs sm:text-sm text-gray-600 file:mr-2 sm:file:mr-4 file:py-1.5 sm:file:py-2 file:px-3 sm:file:px-4 file:rounded file:border-0 file:text-xs sm:file:text-sm file:font-medium file:bg-[var(--primary)] file:text-[var(--primary-foreground)] cursor-pointer"
                       />
-                      <p className="text-xs text-gray-500 mt-2">Recommended: 360x240px badge</p>
+                      <p className="text-xs text-gray-500 mt-2">
+                        Recommended: 360x240px badge
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 <div className="w-full">
-                  <label className="block text-xs sm:text-sm text-[var(--header-text)] mb-1.5 sm:mb-2">Title</label>
+                  <label className="block text-xs sm:text-sm text-[var(--header-text)] mb-1.5 sm:mb-2">
+                    Title
+                  </label>
                   <input
                     type="text"
                     name="title"
@@ -260,8 +283,13 @@ export default function CertificationsManagementPage() {
               {editingCertification === certification._id ? (
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between mb-3 sm:mb-4">
-                    <h3 className="text-base sm:text-lg font-semibold text-[var(--header-text)]">Edit Certification</h3>
-                    <button onClick={handleCancel} className="text-gray-500 flex-shrink-0">
+                    <h3 className="text-base sm:text-lg font-semibold text-[var(--header-text)]">
+                      Edit Certification
+                    </h3>
+                    <button
+                      onClick={handleCancel}
+                      className="text-gray-500 flex-shrink-0"
+                    >
                       <X className="w-5 h-5" />
                     </button>
                   </div>
@@ -290,13 +318,17 @@ export default function CertificationsManagementPage() {
                           onChange={handleImageChange}
                           className="block text-xs sm:text-sm text-gray-600 file:mr-2 sm:file:mr-4 file:py-1.5 sm:file:py-2 file:px-3 sm:file:px-4 file:rounded file:border-0 file:text-xs sm:file:text-sm file:font-medium file:bg-[var(--primary)] file:text-[var(--primary-foreground)] cursor-pointer"
                         />
-                        <p className="text-xs text-gray-500 mt-2">Recommended: 360x240px badge</p>
+                        <p className="text-xs text-gray-500 mt-2">
+                          Recommended: 360x240px badge
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   <div className="w-full">
-                    <label className="block text-xs sm:text-sm text-[var(--header-text)] mb-1.5 sm:mb-2">Title</label>
+                    <label className="block text-xs sm:text-sm text-[var(--header-text)] mb-1.5 sm:mb-2">
+                      Title
+                    </label>
                     <input
                       type="text"
                       name="title"
@@ -354,15 +386,22 @@ export default function CertificationsManagementPage() {
                       <h3 className="font-semibold text-[var(--header-text)] mb-1 sm:mb-2 text-sm sm:text-base break-words">
                         {certification.title}
                       </h3>
-                      <p className="text-xs sm:text-sm text-gray-600 break-words">{certification.description}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 break-words">
+                        {certification.description}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 w-full sm:w-auto justify-end sm:ml-4 flex-shrink-0">
-                    <button onClick={() => handleEdit(certification)} className="p-2 text-[var(--primary)] rounded">
+                    <button
+                      onClick={() => handleEdit(certification)}
+                      className="p-2 text-[var(--primary)] rounded"
+                    >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDeleteCertification(certification._id)}
+                      onClick={() =>
+                        handleDeleteCertification(certification._id)
+                      }
                       className="p-2 text-red-600 rounded"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -375,5 +414,5 @@ export default function CertificationsManagementPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

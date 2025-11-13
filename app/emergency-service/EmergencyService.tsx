@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Loader from "../components/General/Loader";
 
 interface EmergencyService {
   _id: string;
@@ -69,11 +70,9 @@ export default function EmergencyServicePage() {
 
   if (loading) {
     return (
-      <main className="max-w-7xl mx-auto min-h-[400px]">
-        <div className="px-6 md:px-12 py-12 text-center">
-          <p className="text-gray-600">Loading services...</p>
-        </div>
-      </main>
+      <div className="flex items-start mt-20 justify-center min-h-screen">
+              <Loader/>
+            </div>
     );
   }
 

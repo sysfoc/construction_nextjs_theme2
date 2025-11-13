@@ -1,5 +1,6 @@
 "use client"
 
+import Loader from "@/app/components/General/Loader"
 import type { EmergencyService } from "./emergency-services-form"
 
 interface ServicesListProps {
@@ -24,7 +25,9 @@ export function EmergencyServicesList({ services, loading, onEdit, onDelete, onA
       </div>
 
       {loading ? (
-        <div className="p-4 sm:p-8 text-center">Loading services...</div>
+        <div className="flex items-start mt-20 justify-center min-h-screen">
+                <Loader/>
+              </div>
       ) : services.length === 0 ? (
         <div className="p-4 sm:p-8 text-center">No services created yet</div>
       ) : (

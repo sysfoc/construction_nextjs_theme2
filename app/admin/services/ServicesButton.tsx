@@ -1,4 +1,5 @@
 "use client"
+import Loader from "@/app/components/General/Loader"
 import { Save } from "lucide-react"
 import { useState, type ChangeEvent, useEffect } from "react"
 
@@ -102,8 +103,8 @@ export default function ServicesButton({ onDataChange }: ServicesButtonProps) {
 
   if (loading) {
     return (
-      <div className="w-full flex items-center justify-center py-8">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

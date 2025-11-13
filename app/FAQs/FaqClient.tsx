@@ -6,6 +6,7 @@ import { isPageVisible } from "@/lib/api/pageVisibility"
 import { useRouter } from "next/navigation"
 import { HelpCircle, ChevronDown, MessageCircle } from "lucide-react"
 import Link from "next/link"
+import Loader from "../components/General/Loader"
 
 interface FAQItem {
   _id: string
@@ -53,11 +54,8 @@ const FaqClient: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--color-background)] flex items-center justify-center py-20">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-          <p className="text-[var(--color-paragraph)] text-sm">Loading FAQs...</p>
-        </div>
+      <div className="flex items-start mt-20 justify-center min-h-screen">
+        <Loader/>
       </div>
     )
   }

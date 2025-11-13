@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Users, Award, Shield, Clock } from "lucide-react";
+import Loader from "../components/General/Loader";
 
 interface ProjectCardProps {
   imageSrc: string;
@@ -172,9 +173,9 @@ const PartnersClient: React.FC = () => {
           </div>
 
           {partnersLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <p className="text-[var(--paragraph-color)] text-sm">Loading Partners...</p>
-            </div>
+            <div className="flex items-center justify-center">
+                    <Loader size="sm"/>
+                  </div>
           ) : (
             <div className="relative overflow-hidden">
               <div className="flex animate-marquee">
