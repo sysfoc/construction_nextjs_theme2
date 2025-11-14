@@ -59,7 +59,7 @@ export default function AboutPage() {
   }
 
   return (
-    <div className="bg-background dark:bg-background">
+    <div className="bg-background dark:bg-background max-w-6xl mx-auto">
       <AboutHeroSection data={aboutData.hero} />
       <WhatWeDoSection data={aboutData.whatWeDo} />
       <ServicesAndTeamSection data={aboutData.services} />

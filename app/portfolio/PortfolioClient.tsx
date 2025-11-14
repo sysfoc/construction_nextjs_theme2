@@ -1,4 +1,3 @@
-// app/portfolio/page.tsx
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -66,8 +65,8 @@ export default function PortfolioClient() {
 
   if (loading) {
     return (
-      <div className="flex items-start mt-20 justify-center min-h-screen">
-              <Loader/>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader/>
       </div>
     );
   }
@@ -77,44 +76,42 @@ export default function PortfolioClient() {
   }
 
   return (
-    <section className="px-6 max-w-6xl mx-auto py-12">
-      {/* Centered Header */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-2 mb-3 px-4 py-2 bg-primary/10 rounded-full">
-          <FolderOpen className="w-4 h-4 text-primary" />
-          <span className="text-primary text-xs font-bold uppercase">
-            Our best portfolio
+    <section className="px-4 sm:px-8 max-w-7xl mx-auto py-10">
+      
+      <div className="mb-8">
+        <div className="inline-flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-full mb-3">
+          <FolderOpen className="w-3.5 h-3.5 text-primary" />
+          <span className="text-primary text-[10px] font-bold uppercase tracking-wide">
+            Our Portfolio
           </span>
         </div>
-        <h2 className="text-5xl font-bold text-foreground dark:text-white mb-3">
-          Our Portfolio
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground mb-2">
+          Featured Projects
         </h2>
-        <p className="text-sm text-paragraph dark:text-gray-300 max-w-2xl mx-auto">
-          We&apos;ve grown up with the internet revolution, and we know how to
-          deliver on its promise of improved business
+        <p className="text-xs sm:text-sm text-paragraph max-w-xl">
+          Explore our successful projects across different categories
         </p>
       </div>
 
-      {/* Pill-Style Category Filters */}
-      <div className="flex flex-wrap justify-center gap-2 mb-10">
+      <div className="flex flex-wrap gap-2 mb-8">
         <button
           onClick={() => handleFilter("All")}
-          className={`px-5 py-2 rounded-full text-xs font-semibold uppercase transition-all ${
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${
             activeCategory === "All"
-              ? "bg-primary text-white shadow-md"
-              : "bg-background border border-gray-200"
+              ? "bg-primary text-primary-foreground shadow-lg"
+              : "bg-header-background text-paragraph hover:bg-primary/10"
           }`}
         >
-          All Projects
+          All
         </button>
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => handleFilter(cat)}
-            className={`px-5 py-2 rounded-full text-xs font-semibold uppercase transition-all ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${
               activeCategory === cat
-                ? "bg-primary text-white shadow-md"
-                : "bg-background border border-gray-200"
+                ? "bg-primary text-primary-foreground shadow-lg"
+                : "bg-header-background text-paragraph hover:bg-primary/10"
             }`}
           >
             {cat}
@@ -122,50 +119,47 @@ export default function PortfolioClient() {
         ))}
       </div>
 
-      {/* Masonry-Style Grid */}
       {filteredProjects.length === 0 ? (
-        <div className="text-center py-20">
-          <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
-            <Grid3x3 className="w-8 h-8 text-gray-400" />
+        <div className="text-center py-16 bg-header-background rounded-2xl border-2 border-dashed border-border">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Grid3x3 className="w-8 h-8 text-primary" />
           </div>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">
-            No projects found in this category.
+          <p className="text-paragraph text-sm font-medium">
+            No projects in this category
           </p>
         </div>
       ) : (
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="break-inside-avoid group relative bg-background dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+              className="group relative bg-background rounded-xl overflow-hidden border-2 border-border hover:border-primary hover:shadow-2xl transition-all duration-300"
             >
-              {/* Image Container */}
-              <div className="relative w-full overflow-hidden">
+              <div className="relative w-full aspect-[4/3] overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
                 {project.photos.length > 0 ? (
                   <Image
                     src={project.photos[0] || "/placeholder.svg"}
                     alt={project.title}
-                    width={500}
-                    height={500}
-                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                 ) : (
-                  <div className="w-full h-64 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-                    <span className="text-gray-400 text-sm">No image</span>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-paragraph text-xs">No image</span>
                   </div>
                 )}
 
-                {/* Category Badge */}
-                <div className="absolute top-3 right-3">
-                  <span className="px-3 py-1 backdrop-blur-sm text-xs font-semibold text-foreground bg-background rounded-full shadow-lg">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                <div className="absolute top-3 left-3">
+                  <span className="px-2 py-1 bg-primary text-primary-foreground text-[10px] font-bold rounded uppercase">
                     {project.category}
                   </span>
                 </div>
               </div>
 
-              {/* Title Below */}
-              <div className="p-4">
-                <h3 className="font-bold text-foreground dark:text-white text-base">
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 className="font-bold text-white text-sm">
                   {project.title}
                 </h3>
               </div>

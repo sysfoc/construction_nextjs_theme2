@@ -3,7 +3,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { MapPin, Calendar, DollarSign, ArrowRight } from "lucide-react";
+import { MapPin, Calendar, DollarSign, ArrowRight, Briefcase } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { isPageVisible } from "@/lib/api/pageVisibility";
 import Loader from "../components/General/Loader";
@@ -48,80 +48,59 @@ const CareerCard: React.FC<Job & { onApply: (title: string) => void }> = ({
   }
 
   return (
-    <div className="bg-[var(--background)] dark:bg-gray-900 rounded-xl overflow-hidden border border-[var(--border-color)] dark:border-gray-700 transition-all duration-300 hover:shadow-lg hover:border-[var(--primary)] group">
-      {/* Header Section */}
-      <div className="bg-gradient-to-r from-[var(--primary)]/5 to-transparent p-5 border-b border-[var(--border-color)] dark:border-gray-700">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 border-[var(--primary)]/20">
-              {image ? (
-                <Image
-                  src={image || "/placeholder.svg"}
-                  alt={title}
-                  fill
-                  className="object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                  <span className="text-xs text-gray-400">No Image</span>
-                </div>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-bold text-[var(--foreground)] dark:text-gray-100 group-hover:text-[var(--primary)] transition-colors line-clamp-2">
-                {title}
-              </h3>
-            </div>
-          </div>
-          <span className="px-3 py-1 text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 rounded-full whitespace-nowrap flex-shrink-0">
-            {jobType}
-          </span>
-        </div>
-      </div>
-
-      {/* Content Section */}
-      <div className="p-5">
-        {/* Job Details Grid */}
-        <div className="grid grid-cols-1 gap-2.5 mb-4">
-          <div className="flex items-center gap-2 text-sm">
-            <div className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center flex-shrink-0">
-              <MapPin className="w-4 h-4 text-[var(--primary)]" />
-            </div>
-            <span className="text-[var(--paragraph-color)] dark:text-gray-400">
-              {location}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <div className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-4 h-4 text-[var(--primary)]" />
-            </div>
-            <span className="text-[var(--paragraph-color)] dark:text-gray-400">
-              {deadline}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <div className="w-8 h-8 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center flex-shrink-0">
-              <DollarSign className="w-4 h-4 text-[var(--primary)]" />
-            </div>
-            <span className="text-[var(--paragraph-color)] dark:text-gray-400 font-medium">
-              {payRange}
-            </span>
+    <div className="bg-[var(--background)] dark:bg-gray-900 rounded-xl border border-[var(--border-color)] dark:border-gray-700 transition-all duration-300 hover:shadow-lg hover:border-[var(--primary)] group overflow-hidden">
+      <div className="flex items-stretch">
+        {/* Left - Image Section */}
+        <div className="w-24 flex-shrink-0 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--primary)]/5 flex items-center justify-center p-4 relative">
+          <div className="relative w-16 h-16 rounded-lg overflow-hidden border-2 border-[var(--primary)]/30">
+            {image ? (
+              <Image src={image || "/placeholder.svg"} alt={title} fill className="object-cover" />
+            ) : (
+              <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                <Briefcase className="w-6 h-6 text-gray-400" />
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Description */}
-        <p className="text-sm text-[var(--paragraph-color)] dark:text-gray-400 leading-relaxed mb-4 line-clamp-3">
-          {description}
-        </p>
+        {/* Right - Content Section */}
+        <div className="flex-1 p-4 flex flex-col min-w-0">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <h3 className="text-base font-bold text-[var(--foreground)] dark:text-gray-100 group-hover:text-[var(--primary)] transition-colors line-clamp-1 flex-1">
+              {title}
+            </h3>
+            <span className="px-2.5 py-0.5 text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 rounded-full whitespace-nowrap">
+              {jobType}
+            </span>
+          </div>
 
-        {/* Apply Button */}
-        <button
-          onClick={() => onApply(title)}
-          className="w-full bg-[var(--primary)] hover:bg-opacity-90 text-[var(--primary-foreground)] dark:text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition-all duration-300 flex items-center justify-center gap-2 group/btn"
-        >
-          APPLY NOW
-          <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-        </button>
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 mb-3 text-xs">
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[var(--primary)]" />
+              <span className="text-[var(--paragraph-color)] dark:text-gray-400">{location}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[var(--primary)]" />
+              <span className="text-[var(--paragraph-color)] dark:text-gray-400">{deadline}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <DollarSign className="w-3.5 h-3.5 text-[var(--primary)]" />
+              <span className="text-[var(--paragraph-color)] dark:text-gray-400 font-medium">{payRange}</span>
+            </div>
+          </div>
+
+          <p className="text-xs text-[var(--paragraph-color)] dark:text-gray-400 leading-relaxed mb-3 line-clamp-2">
+            {description}
+          </p>
+
+          <button
+            onClick={() => onApply(title)}
+            className="self-end bg-[var(--primary)] hover:bg-opacity-90 text-[var(--primary-foreground)] dark:text-white font-semibold py-2.5 px-4 rounded-lg text-xs transition-all duration-300 flex items-center gap-1.5 group/btn"
+          >
+            APPLY NOW
+            <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -167,7 +146,7 @@ const CareersClient: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             {jobs.map((job) => (
               <CareerCard key={job.id} {...job} onApply={handleApply} />
             ))}

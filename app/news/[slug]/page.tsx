@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { Calendar, User, MoveLeft, Newspaper } from "lucide-react";
 import ArticleContent from "../../components/General/article-content";
 import type { NewsArticle } from "@/lib/models/News";
+import Loader from "@/app/components/General/Loader";
 
 export default function ArticlePage({
   params,
@@ -42,11 +43,9 @@ export default function ArticlePage({
 
   if (loading) {
     return (
-      <main className="bg-background text-foreground min-h-96">
-        <section className="mx-auto max-w-5xl p-4">
-          <p className="text-muted-foreground">Loading article...</p>
-        </section>
-      </main>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader />
+      </div>
     );
   }
 
@@ -55,55 +54,72 @@ export default function ArticlePage({
   }
 
   return (
-    <main className="bg-background text-foreground min-h-96">
-      <section className="mx-auto max-w-5xl p-4">
-        <nav className="text-sm">
+    <main className="bg-background text-foreground min-h-screen py-10">
+      <section className="mx-auto max-w-5xl px-4 sm:px-8">
+        {/* Back Button */}
+        <nav className="mb-6">
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-[var(--primary)] text-[var(--primary-foreground)]"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground hover:shadow-lg transition-all duration-300 font-semibold text-sm"
             aria-label="Back to News"
           >
-            <ArrowLeft size={16} aria-hidden="true" />
-            <span className="font-medium">Back to News</span>
+            <MoveLeft size={18} aria-hidden="true" />
+            <span>BACK TO NEWS</span>
           </Link>
         </nav>
 
-        <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-          {/* Image side */}
-          <div className="relative w-full h-56 md:h-72 rounded-md overflow-hidden border border-border bg-muted">
-            <Image
-              src={
-                article.image ||
-                "/placeholder.svg?height=288&width=640&query=construction%20news%20cover"
-              }
-              alt={article.title}
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
-              priority={false}
-            />
-          </div>
-
+        {/* Article Header Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start mb-8">
           {/* Text side */}
-          <header className="md:pl-1 md:self-center md:flex md:flex-col md:justify-center">
-            <h1 className="text-balance text-2xl font-semibold text-foreground">
+          <header className="md:pl-2 md:self-center">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground mb-4 leading-tight">
               {article.title}
             </h1>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {article.date} •{" "}
-              <span className="inline-flex items-center rounded-sm px-2 py-0.5 bg-[var(--primary)] text-[var(--primary-foreground)]">
-                {article.author}
-              </span>
-            </p>
+
+            {/* Meta Info */}
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-background border-2 border-border rounded-lg">
+                <Calendar className="w-4 h-4 text-primary" />
+                <span className="text-xs font-medium text-paragraph">
+                  {article.date}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border-2 border-primary rounded-lg">
+                <User className="w-4 h-4 text-primary" />
+                <span className="text-xs font-bold text-primary">
+                  {article.author}
+                </span>
+              </div>
+            </div>
+
             {article.excerpt ? (
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-sm text-paragraph leading-relaxed border-l-4 border-primary pl-4 py-2 bg-primary/5 rounded-r">
                 {article.excerpt}
               </p>
             ) : null}
           </header>
+
+          {/* Image side */}
+          <div className="relative w-full h-64 md:h-80 rounded-xl overflow-hidden border-2 border-border bg-gradient-to-br from-primary/10 to-primary/5">
+            {article.image ? (
+              <Image
+                src={article.image}
+                alt={article.title}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover"
+                priority={false}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <Newspaper className="w-16 h-16 text-primary/30" />
+              </div>
+            )}
+          </div>
         </div>
 
-        <article className="mt-4">
+        {/* Article Content */}
+        <article className="bg-background rounded-xl border-2 border-border p-6 sm:p-8">
           <ArticleContent paragraphs={article.content} />
         </article>
       </section>

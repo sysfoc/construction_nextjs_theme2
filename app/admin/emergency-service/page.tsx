@@ -2,15 +2,325 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { EmergencySettings } from "@/app/admin/components/emergency-services/emergency-settings"
-import { EmergencyServiceModal } from "@/app/admin/components/emergency-services/emergency-service-modal"
-import type { EmergencyServiceForm } from "@/app/admin/components/emergency-services/emergency-services-form"
-import { EmergencyServicesList } from "@/app/admin/components/emergency-services/emergency-services-list"
-import type { EmergencyService } from "@/app/admin/components/emergency-services/emergency-services-form"
+
+interface EmergencyService {
+  _id: string
+  title: string
+  slug: string
+  description: string
+  image: string
+  calloutPrice: number
+  price: number
+  responseTime: string
+  whatWeHelpWith: string[]
+}
+
+interface EmergencyServiceForm {
+  title: string
+  slug: string
+  description: string
+  image: string
+  calloutPrice: string
+  price: string
+  responseTime: string
+  whatWeHelpWith: string
+}
 
 interface GlobalSettings {
   emergencyEmail: string
   emergencyPhone: string
+}
+
+function EmergencySettings({ initialSettings, onSettingsSaved }: { initialSettings: GlobalSettings; onSettingsSaved: () => void }) {
+  const [settings, setSettings] = useState(initialSettings)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    setSettings(initialSettings)
+  }, [initialSettings])
+
+  const handleSave = async () => {
+    try {
+      setSaving(true)
+      const response = await fetch("/api/emergency-services/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      })
+
+      if (!response.ok) throw new Error("Failed to save")
+      alert("Settings saved successfully")
+      onSettingsSaved()
+    } catch (error) {
+      alert("Failed to save settings")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="bg-white rounded-lg shadow p-6">
+      <h2 className="text-xl font-semibold mb-4">Emergency Contact Settings</h2>
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">Emergency Email</label>
+          <input
+            type="email"
+            value={settings.emergencyEmail}
+            onChange={(e) => setSettings({ ...settings, emergencyEmail: e.target.value })}
+            className="w-full px-3 py-2 border rounded-md"
+            placeholder="emergency@example.com"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Emergency Phone</label>
+          <input
+            type="text"
+            value={settings.emergencyPhone}
+            onChange={(e) => setSettings({ ...settings, emergencyPhone: e.target.value })}
+            className="w-full px-3 py-2 border rounded-md"
+            placeholder="+1234567890"
+          />
+        </div>
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-md disabled:opacity-50"
+        >
+          {saving ? "Saving..." : "Save Settings"}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function EmergencyServicesList({
+  services,
+  loading,
+  onEdit,
+  onDelete,
+  onAddNew,
+}: {
+  services: EmergencyService[]
+  loading: boolean
+  onEdit: (service: EmergencyService) => void
+  onDelete: (id: string) => void
+  onAddNew: () => void
+}) {
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">Services</h2>
+        <button
+          onClick={onAddNew}
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm"
+        >
+          Add New Service
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="text-center py-8">Loading...</div>
+      ) : services.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">No services found</div>
+      ) : (
+        <div className="grid gap-4">
+          {services.map((service) => (
+            <div key={service._id} className="bg-white rounded-lg shadow p-4">
+              <div className="flex gap-4">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="w-20 h-20 object-cover rounded-md flex-shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-lg mb-1">{service.title}</h3>
+                  <p className="text-sm text-gray-600 mb-2">{service.description}</p>
+                  <div className="flex flex-wrap gap-4 text-sm text-gray-700">
+                    <span>Callout: £{service.calloutPrice}</span>
+                    <span>Price: £{service.price}</span>
+                    <span>Response: {service.responseTime}</span>
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => onEdit(service)}
+                    className="bg-primary text-primary-foreground px-3 py-1 rounded-md text-sm h-fit"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => onDelete(service._id)}
+                    className="bg-primary text-primary-foreground px-3 py-1 rounded-md text-sm h-fit"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function EmergencyServiceModal({
+  isOpen,
+  editingId,
+  form,
+  submitting,
+  onClose,
+  onFormChange,
+  onTitleChange,
+  onSubmit,
+}: {
+  isOpen: boolean
+  editingId: string | null
+  form: EmergencyServiceForm
+  submitting: boolean
+  onClose: () => void
+  onFormChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+  onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onSubmit: (e: React.FormEvent) => void
+}) {
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">{editingId ? "Edit Service" : "Add New Service"}</h2>
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+              ✕
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Title *</label>
+              <input
+                type="text"
+                name="title"
+                value={form.title}
+                onChange={onTitleChange}
+                className="w-full px-3 py-2 border rounded-md"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Slug *</label>
+              <input
+                type="text"
+                name="slug"
+                value={form.slug}
+                onChange={onFormChange}
+                className="w-full px-3 py-2 border rounded-md bg-gray-50"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Description</label>
+              <textarea
+                name="description"
+                value={form.description}
+                onChange={onFormChange}
+                className="w-full px-3 py-2 border rounded-md"
+                rows={3}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Image URL *</label>
+              <input
+                type="url"
+                name="image"
+                value={form.image}
+                onChange={onFormChange}
+                className="w-full px-3 py-2 border rounded-md"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Callout Price *</label>
+                <input
+                  type="number"
+                  name="calloutPrice"
+                  value={form.calloutPrice}
+                  onChange={onFormChange}
+                  className="w-full px-3 py-2 border rounded-md"
+                  step="0.01"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Price *</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={form.price}
+                  onChange={onFormChange}
+                  className="w-full px-3 py-2 border rounded-md"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Response Time *</label>
+              <input
+                type="text"
+                name="responseTime"
+                value={form.responseTime}
+                onChange={onFormChange}
+                className="w-full px-3 py-2 border rounded-md"
+                placeholder="e.g., 30 minutes"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">What We Help With * (one per line)</label>
+              <textarea
+                name="whatWeHelpWith"
+                value={form.whatWeHelpWith}
+                onChange={onFormChange}
+                className="w-full px-3 py-2 border rounded-md"
+                rows={5}
+                placeholder="Enter each item on a new line"
+                required
+              />
+            </div>
+
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 border rounded-md hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                onClick={onSubmit}
+                disabled={submitting}
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-md disabled:opacity-50"
+              >
+                {submitting ? "Saving..." : editingId ? "Update" : "Create"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function AdminEmergencyServicePage() {

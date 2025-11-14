@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { isPageVisible } from "@/lib/api/pageVisibility";
 import { useRouter } from "next/navigation";
+import { Award, Shield, Star } from "lucide-react";
+
 
 export default function BookService() {
   const [isVisible, setIsVisible] = useState(true);
@@ -15,6 +17,7 @@ export default function BookService() {
     date: "",
     details: "",
   });
+
   const router = useRouter();
 
   useEffect(() => {
@@ -70,118 +73,164 @@ export default function BookService() {
   };
 
   return (
-    <main className='min-h-screen px-6 py-16 flex items-center justify-center'>
-      <section className='max-w-3xl w-full border border-gray-100 rounded-2xl shadow-md p-10'>
-        <div className='text-center mb-10'>
-          <h1 className='text-4xl font-extrabold text-primary mb-3 tracking-tight uppercase'>
-            Book a Service
-          </h1>
-          <p className='text-base max-w-lg mx-auto'>
-            Schedule your construction or renovation service with our expert
-            team.
-          </p>
-        </div>
+    <main className="min-h-screen flex flex-col items-center px-6 py-20">
 
-        <form className='grid md:grid-cols-2 gap-6' onSubmit={handleSubmit}>
-          {[
-            {
-              id: "name",
-              label: "Full Name",
-              type: "text",
-              placeholder: "John Doe",
-            },
-            {
-              id: "email",
-              label: "Email Address",
-              type: "email",
-              placeholder: "john@example.com",
-            },
-            {
-              id: "phone",
-              label: "Phone Number",
-              type: "tel",
-              placeholder: "+92 300 1234567",
-            },
-          ].map((field) => (
-            <div key={field.id} className='col-span-2 md:col-span-1'>
-              <label
-                htmlFor={field.id}
-                className='block text-sm font-medium mb-1'
-              >
-                {field.label}
-              </label>
-              <input
-                id={field.id}
-                type={field.type}
-                required
-                placeholder={field.placeholder}
-                value={formData[field.id as keyof typeof formData]}
-                onChange={handleChange}
-                className='w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary'
-              />
-            </div>
-          ))}
+      {/* PAGE HEADING OUTSIDE */}
+      <div className="text-center mb-14">
+        <h1 className="text-5xl font-extrabold text-primary tracking-tight uppercase mb-3">
+          Book a Service
+        </h1>
+        <p className="text-base max-w-2xl mx-auto">
+          Secure your construction, renovation, or inspection appointment with our expert team.
+        </p>
+      </div>
 
-          <div className='col-span-2 md:col-span-1'>
-            <label htmlFor='service' className='block text-sm font-medium mb-1'>
-              Service Type
-            </label>
-            <select
-              id='service'
-              required
-              value={formData.service}
-              onChange={handleChange}
-              className='w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary'
-            >
-              <option value=''>Select a service</option>
-              <option>Residential Construction</option>
-              <option>Commercial Renovation</option>
-              <option>Site Inspection</option>
-              <option>Material Supply</option>
-              <option>Custom Project</option>
-            </select>
-          </div>
+      {/* MAIN CONTENT GRID */}
+      <div className="w-full max-w-5xl grid lg:grid-cols-3 gap-10">
 
-          <div className='col-span-2 md:col-span-1'>
-            <label htmlFor='date' className='block text-sm font-medium mb-1'>
-              Preferred Date
-            </label>
-            <input
-              id='date'
-              type='date'
-              required
-              value={formData.date}
-              onChange={handleChange}
-              className='w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary'
+        {/* SIDEBAR WITH IMAGE */}
+        <aside className="lg:col-span-1 bg-background border border-gray-100 shadow-md rounded-2xl p-0 overflow-hidden flex flex-col">
+
+          {/* Sidebar Image */}
+          <div className="w-full h-56 overflow-hidden rounded-t-2xl">
+            <img
+              src="/gallery/infrastructure-6.jpg"
+              alt="Service"
+              className="w-full h-full object-cover"
             />
           </div>
 
-          <div className='col-span-2'>
-            <label htmlFor='details' className='block text-sm font-medium mb-1'>
-              Project Details
-            </label>
-            <textarea
-              id='details'
-              rows={5}
-              required
-              value={formData.details}
-              onChange={handleChange}
-              placeholder='Describe your project, location, and any specific requirements...'
-              className='w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary'
-            ></textarea>
-          </div>
+          <div className="space-y-6 mt-6">
+  <div className="flex items-start gap-4 p-4">
+    <div className="p-3 bg-primary text-primary-foreground rounded-xl">
+      <Shield className="w-6 h-6" />
+    </div>
+    <div>
+      <h3 className="text-lg font-semibold text-primary">Strong & Reliable Services</h3>
+      <p className="text-paragraph text-sm">
+        We deliver high-quality construction work backed by trusted professionals.
+      </p>
+    </div>
+  </div>
 
-          <div className='col-span-2'>
+  <div className="flex items-start gap-4 p-4">
+    <div className="p-3 bg-primary text-primary-foreground rounded-xl">
+      <Award className="w-6 h-6" />
+    </div>
+    <div>
+      <h3 className="text-lg font-semibold text-primary">Experienced Professionals</h3>
+      <p className="text-paragraph text-sm">
+        Work done by a trained and certified workforce.
+      </p>
+    </div>
+  </div>
+
+  <div className="flex items-start gap-4 p-4">
+    <div className="p-3 bg-primary text-primary-foreground rounded-xl">
+      <Star className="w-6 h-6" />
+    </div>
+    <div>
+      <h3 className="text-lg font-semibold text-primary">Quality Guaranteed</h3>
+      <p className="text-paragraph text-sm">
+        We ensure every service meets strict quality standards.
+      </p>
+    </div>
+  </div>
+</div>
+
+        </aside>
+
+        {/* FORM SECTION */}
+        <section className="lg:col-span-2 bg-white border border-gray-100 shadow-md rounded-2xl p-10">
+          <form onSubmit={handleSubmit} className="space-y-8">
+
+            {/* Inputs Grid */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                { id: "name", label: "Full Name", type: "text", placeholder: "John Doe" },
+                { id: "email", label: "Email Address", type: "email", placeholder: "john@example.com" },
+                { id: "phone", label: "Phone Number", type: "tel", placeholder: "+92 300 1234567" },
+              ].map((field) => (
+                <div key={field.id} className="flex flex-col">
+                  <label htmlFor={field.id} className="text-sm font-medium mb-2">
+                    {field.label}
+                  </label>
+                  <input
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    required
+                    value={formData[field.id as keyof typeof formData]}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none"
+                  />
+                </div>
+              ))}
+
+              {/* Service Dropdown */}
+              <div className="flex flex-col">
+                <label htmlFor="service" className="text-sm font-medium mb-2">
+                  Service Type
+                </label>
+                <select
+                  id="service"
+                  required
+                  value={formData.service}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">Select a service</option>
+                  <option>Residential Construction</option>
+                  <option>Commercial Renovation</option>
+                  <option>Site Inspection</option>
+                  <option>Material Supply</option>
+                  <option>Custom Project</option>
+                </select>
+              </div>
+
+              {/* Date */}
+              <div className="flex flex-col">
+                <label htmlFor="date" className="text-sm font-medium mb-2">
+                  Preferred Date
+                </label>
+                <input
+                  id="date"
+                  type="date"
+                  required
+                  value={formData.date}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            </div>
+
+            {/* Details */}
+            <div className="flex flex-col">
+              <label htmlFor="details" className="text-sm font-medium mb-2">
+                Project Details
+              </label>
+              <textarea
+                id="details"
+                rows={5}
+                required
+                placeholder="Describe your project, location, and any specific requirements..."
+                value={formData.details}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary"
+              ></textarea>
+            </div>
+
+            {/* Submit Button */}
             <button
-              type='submit'
+              type="submit"
               disabled={loading}
-              className='w-full bg-primary text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all uppercase tracking-wide'
+              className="w-full bg-primary text-white font-semibold py-3 rounded-xl uppercase tracking-wide hover:opacity-90 transition-all"
             >
               {loading ? "Submitting..." : "Book Appointment"}
             </button>
-          </div>
-        </form>
-      </section>
+          </form>
+        </section>
+      </div>
     </main>
   );
 }

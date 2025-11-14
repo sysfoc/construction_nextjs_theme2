@@ -1,10 +1,16 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { Search, ChevronsDown, ChevronsUp } from "lucide-react";
-import type { NewsArticle } from "@/lib/models/News";
+import { Search, ChevronsDown, ChevronsUp, Calendar, User, Newspaper } from "lucide-react";
+
+interface NewsArticle {
+  slug: string;
+  title: string;
+  excerpt: string;
+  author: string;
+  date: string;
+  image: string | null;
+}
 
 interface NewsSearchListProps {
   items: NewsArticle[];
@@ -37,7 +43,7 @@ export default function NewsSearchList({ items }: NewsSearchListProps) {
   return (
     <div className="w-full">
       {/* Search Bar */}
-      <div className="relative">
+      <div className="relative mb-8">
         <label htmlFor="news-search" className="sr-only">
           Search news
         </label>
@@ -47,91 +53,104 @@ export default function NewsSearchList({ items }: NewsSearchListProps) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search news by title, excerpt, or author..."
-          className="w-full rounded-md border border-border bg-background text-foreground text-sm px-8 py-2 outline-none"
+          className="w-full rounded-lg border-2 border-border bg-background text-foreground text-sm px-10 py-3 outline-none focus:border-primary transition-colors"
           role="searchbox"
           aria-label="Search news"
         />
         <Search
-          size={16}
-          className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+          size={18}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-primary"
           aria-hidden="true"
         />
       </div>
 
       {/* News Grid */}
-      <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         {shownItems.map((item) => (
           <article
             key={item.slug}
-            className="border border-border rounded-md overflow-hidden bg-background hover:border-[var(--primary)] transition-colors"
+            className="group relative bg-background rounded-xl overflow-hidden border-2 border-border hover:border-primary hover:shadow-2xl transition-all duration-300"
           >
-            <Link href={`/news/${item.slug}`} className="block">
+            <a href={`/news/${item.slug}`} className="block">
               {/* Image */}
-              <div className="relative h-40 w-full">
-                <Image
-                  src={
-                    item.image ||
-                    "/placeholder.svg?height=160&width=320&query=construction%20thumbnail"
-                  }
-                  alt={item.title}
-                  fill
-                  sizes="(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw"
-                  className="object-cover group-hover:scale-105 transition-transform"
-                  priority={false}
-                />
+              <div className="relative h-48 w-full overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Newspaper className="w-12 h-12 text-primary/30" />
+                  </div>
+                )}
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
 
               {/* Content */}
-              <div className="p-3">
-                <h2 className="text-base font-medium text-foreground line-clamp-2 group-hover:text-[var(--primary)] transition-colors">
+              <div className="p-4">
+                <h2 className="text-base font-bold text-foreground line-clamp-2 group-hover:text-primary transition-colors mb-2">
                   {item.title}
                 </h2>
-                <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                <p className="text-sm text-paragraph line-clamp-2 mb-3">
                   {item.excerpt}
                 </p>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  {item.date} •{" "}
-                  <span className="inline-flex items-center rounded-sm px-2 py-0.5 bg-[var(--primary)] text-[var(--primary-foreground)]">
-                    {item.author}
-                  </span>
-                </p>
+                
+                {/* Meta Info */}
+                <div className="flex items-center justify-between pt-3 border-t border-border">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-xs text-paragraph">{item.date}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 rounded">
+                    <User className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-xs font-semibold text-primary">{item.author}</span>
+                  </div>
+                </div>
               </div>
-            </Link>
+            </a>
           </article>
         ))}
 
         {filteredItems.length === 0 && (
-          <p className="text-sm text-muted-foreground">
-            No news articles found matching your search.
-          </p>
+          <div className="col-span-full text-center py-16 bg-background rounded-2xl border-2 border-dashed border-border">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+              <Search className="w-8 h-8 text-primary" />
+            </div>
+            <p className="text-paragraph text-sm font-medium">
+              No news articles found matching your search.
+            </p>
+          </div>
         )}
       </div>
 
       {/* Show More / Show Less */}
       {filteredItems.length > 6 && (
-        <div className="mt-6 flex items-center justify-center gap-2">
+        <div className="mt-8 flex items-center justify-center gap-3">
           {visible < filteredItems.length && (
             <button
               type="button"
               onClick={() =>
                 setVisible((v) => Math.min(v + 6, filteredItems.length))
               }
-              className="inline-flex items-center gap-1 rounded-md border border-border bg-background text-foreground text-sm px-3 py-2"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-border bg-background hover:bg-primary/10 hover:border-primary text-foreground text-sm font-semibold px-4 py-2.5 transition-all"
               aria-label="Show more articles"
             >
-              <ChevronsDown size={16} aria-hidden="true" />
-              <span>Show more</span>
+              <ChevronsDown size={18} className="text-primary" aria-hidden="true" />
+              <span>SHOW MORE</span>
             </button>
           )}
           {visible > 6 && (
             <button
               type="button"
               onClick={() => setVisible((v) => Math.max(6, v - 6))}
-              className="inline-flex items-center gap-1 rounded-md border border-border bg-background text-foreground text-sm px-3 py-2"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-border bg-background hover:bg-primary/10 hover:border-primary text-foreground text-sm font-semibold px-4 py-2.5 transition-all"
               aria-label="Show fewer articles"
             >
-              <ChevronsUp size={16} aria-hidden="true" />
-              <span>Show less</span>
+              <ChevronsUp size={18} className="text-primary" aria-hidden="true" />
+              <span>SHOW LESS</span>
             </button>
           )}
         </div>

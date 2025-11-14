@@ -23,6 +23,7 @@ export default function Blog() {
       method: "GET",
     });
     const data = await res.json();
+    console.log(data)
     setLoading(false);
     setFormData(data.blogs);
   };
@@ -89,8 +90,8 @@ export default function Blog() {
           </div>
         </div>
       </div>
-      <div className='overflow-x-auto'>
-        <Table>
+      <div className='overflow-x-auto bg-black'>
+        <Table className="!bg-transparent dark:!bg-transparent">
           <TableHead>
             <TableRow>
               <TableHeadCell className='!bg-[#182641] text-white'>
@@ -120,7 +121,7 @@ export default function Blog() {
             )}
             {(filteredResults.length > 0 &&
               filteredResults.map((item) => (
-                <TableRow key={item._id}>
+                <TableRow key={item._id} className="">
                   <TableCell>{item.title}</TableCell>
                   <TableCell>{item.slug}</TableCell>
                   <TableCell>{item.blogWriter}</TableCell>

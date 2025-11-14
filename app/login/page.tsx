@@ -4,8 +4,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "../context/UserContext";
-import { Key, KeyIcon, LogIn, User2 } from "lucide-react";
-import User from "@/lib/models/User";
+import { KeyIcon, LogIn, Mail, Lock, Info, Zap } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -44,180 +43,178 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[url('/gallery/commercial-7.jpg')] bg-cover bg-center bg-no-repeat p-6">
-      <div className="w-full max-w-4xl bg-background rounded-2xl shadow-2xl overflow-hidden">
-        <div className="flex flex-col md:flex-row-reverse">
-          {/* Left Panel - Demo Credentials */}
-          <div className="md:w-2/5 bg-primary p-8 flex flex-col justify-center text-white">
-            <div className="mb-6">
-              <div className="text-2xl flex items-center gap-2">
-                <User2 className="w-6 h-6" />
-                <h2 className="font-bold m-0">Welcome Back</h2>
-              </div>
-              <p className="text-orange-100 text-sm">
-                Sign in to access your admin dashboard
-              </p>
+    <div className="min-h-screen w-full flex bg-background">
+      {/* Left Sidebar - Demo Credentials */}
+      <div className="w-80 bg-primary flex-shrink-0 p-8 flex-col justify-center gap-3 shadow-2xl relative overflow-hidden hidden lg:flex">
+        {/* Decorative Elements */}
+        <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-20 translate-x-20"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-16 -translate-x-16"></div>
+        
+        <div className="relative z-10">
+          <div className="mb-8">
+            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4">
+              <KeyIcon className="w-6 h-6 text-white" />
             </div>
-
-
-             <div className="text-orange-100 text-xs mb-5">
-              <ul className="list-disc list-inside space-y-1">
-                <li>Click on button above to autofill fields.</li>
-                <li>
-                  Click on <strong>Sign In</strong> to access the dashboard.
-                </li>
-                <li>Discover the admin side.</li>
-              </ul>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 mb-5 border border-white/20">
-              <h3 className="text-lg font-semibold mb-3 flex items-center">
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                Demo Credentials
-              </h3>
-              <div className="space-y-2 mb-4">
-                <div className="flex items-start">
-                  <span className="text-orange-200 text-sm font-medium w-20">
-                    Email:
-                  </span>
-                  <span className="text-white text-sm font-mono">
-                    admin@example.com
-                  </span>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-orange-200 text-sm font-medium w-20">
-                    Password:
-                  </span>
-                  <span className="text-white text-sm font-mono">admin123</span>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={handleAutofill}
-                className="w-full px-4 py-2.5 bg-white text-primary rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 shadow-lg"
-              >
-                Quick Fill Credentials
-              </button>
-            </div>
+            <h2 className="text-2xl font-black text-white mb-2">Admin Portal</h2>
+            <p className="text-white/80 text-sm">Quick access to your dashboard</p>
           </div>
 
-          {/* Right Panel - Login Form */}
-          <div className="md:w-3/5 p-8 md:p-10 text-paragraph">
-            <div className="max-w-md mx-auto">
-              <div className="mb-6">
-                <h1 className="text-2xl flex items-center gap-2 font-bold mb-2">
-                  Admin Login
-                  <KeyIcon className="text-primary" />
-                </h1>
-                <p>Enter your credentials to continue</p>
+          <div className="space-y-4">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+              <div className="flex items-center gap-2 mb-3">
+                <Info className="w-4 h-4 text-white" />
+                <h3 className="text-sm font-bold text-white">Demo Credentials</h3>
               </div>
-
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-2 text-sm">
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-semibold mb-2"
-                  >
-                    Email Address
-                  </label>
+                  <p className="text-white/60 text-xs mb-1">Email</p>
+                  <p className="text-white font-mono text-xs bg-white/10 px-2 py-1.5 rounded">admin@example.com</p>
+                </div>
+                <div>
+                  <p className="text-white/60 text-xs mb-1">Password</p>
+                  <p className="text-white font-mono text-xs bg-white/10 px-2 py-1.5 rounded">admin123</p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleAutofill}
+              className="w-full bg-white text-primary px-4 py-3 rounded-lg font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2 shadow-lg"
+            >
+              <Zap className="w-4 h-4" />
+              Quick Fill
+            </button>
+          </div>
+        </div>
+
+        <div className="relative z-10">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <p className="text-white/80 text-xs leading-relaxed">
+              Click <strong>Quick Fill</strong> to autofill credentials, then <strong>Sign In</strong> to access the admin dashboard.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content - Centered Login Form */}
+      <div className="flex-1 flex items-center justify-center p-6 bg-[url('/gallery/commercial-7.jpg')] bg-cover bg-center relative">
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-background/95 to-background/90 backdrop-blur-sm"></div> */}
+        
+        <div className="w-full max-w-md relative z-10">
+          {/* Mobile Demo Credentials */}
+          <div className="lg:hidden bg-primary/95 backdrop-blur-sm rounded-xl p-6 mb-6 border border-primary">
+            <div className="flex items-center gap-2 mb-4">
+              <Info className="w-5 h-5 text-white" />
+              <h3 className="text-base font-bold text-white">Demo Access</h3>
+            </div>
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-white/70">Email:</span>
+                <span className="text-white font-mono text-xs">admin@example.com</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-white/70">Password:</span>
+                <span className="text-white font-mono text-xs">admin123</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleAutofill}
+              className="w-full bg-white text-primary px-4 py-2.5 rounded-lg font-bold hover:bg-white/90 transition-all text-sm"
+            >
+              Quick Fill Credentials
+            </button>
+          </div>
+
+          {/* Login Card */}
+          <div className="bg-background rounded-2xl shadow-2xl p-7 border border-border">
+            <div className="text-center mb-5">
+              <div className="inline-flex items-center justify-center w-14 h-14 bg-primary/10 rounded-xl mb-4">
+                <LogIn className="w-7 h-7 text-primary" />
+              </div>
+              <h1 className="text-3xl font-black text-header-text mb-2">Welcome Back</h1>
+              <p className="text-sm text-paragraph">Sign in to access your admin dashboard</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-bold text-paragraph mb-2">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                    <Mail className="w-5 h-5 text-paragraph/40" />
+                  </div>
                   <input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2.5 placeholder-paragraph/50 border border-gray-300 rounded-lg focus:outline-none transition-all duration-200"
-                    placeholder="Enter your email"
+                    className="w-full pl-11 pr-4 py-3 border-2 border-border rounded-lg focus:outline-none focus:border-primary transition-all text-paragraph placeholder:text-paragraph/40"
+                    placeholder="your@email.com"
                     required
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-semibold mb-2"
-                  >
-                    Password
-                  </label>
+              <div>
+                <label htmlFor="password" className="block text-sm font-bold text-paragraph mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                    <Lock className="w-5 h-5 text-paragraph/40" />
+                  </div>
                   <input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-2.5 placeholder-paragraph/50 border border-gray-300 rounded-lg focus:outline-none transition-all duration-200"
-                    placeholder="Enter your password"
+                    className="w-full pl-11 pr-4 py-3 border-2 border-border rounded-lg focus:outline-none focus:border-primary transition-all text-paragraph placeholder:text-paragraph/40"
+                    placeholder="••••••••"
                     required
                   />
                 </div>
+              </div>
 
-                {error && (
-                  <div className="flex items-center p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <svg
-                      className="w-5 h-5 text-red-500 mr-2 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-red-700 text-sm font-medium">
-                      {error}
-                    </span>
+              {error && (
+                <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-red-600 font-bold text-lg">!</span>
+                    </div>
+                    <p className="text-red-700 text-sm font-semibold">{error}</p>
                   </div>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-primary text-primary-foreground py-3.5 rounded-lg font-bold hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Signing in...</span>
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="w-5 h-5" />
+                    <span>Sign In to Dashboard</span>
+                  </>
                 )}
+              </button>
+            </form>
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-[var(--primary)] text-[var(--primary-foreground)] py-2.5 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 disabled:from-orange-300 disabled:to-orange-400 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  {loading ? (
-                    <span className="flex items-center justify-center">
-                      <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Signing in...
-                    </span>
-                  ) : (
-                    "Sign In to Dashboard"
-                  )}
-                </button>
-              </form>
-
-              <div className="mt-6 pt-5 border-t border-gray-200">
-                <p className="text-center text-sm text-gray-500">
-                  Protected by industry-standard security
-                </p>
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex items-center justify-center gap-2 text-xs text-paragraph/60">
+                <KeyIcon className="w-3.5 h-3.5" />
+                <span>Protected by industry-standard security</span>
               </div>
             </div>
           </div>

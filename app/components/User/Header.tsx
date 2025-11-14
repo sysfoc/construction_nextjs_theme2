@@ -20,12 +20,12 @@ export default function Header() {
 
   const navLinks = [
     {
-      name: "Pages",
+      name: "Overview",
       sublinks: [
-        { name: "Our Team", href: "/team" },
         { name: "Careers", href: "/careers" },
         { name: "Gallery", href: "/gallery" },
         { name: "About Us", href: "/about" },
+        { name: "Emergency Services", href: "/emergency-service" },
       ],
     },
     {

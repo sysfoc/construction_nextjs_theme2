@@ -53,66 +53,55 @@ export default function TeamClient() {
   }
 
   return (
-    <>
-      <section className='py-12 lg:py-16 min-h-96'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-10'>
-          {/* Header Section */}
-          <div className='text-center mb-10'>
-            <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-3">
-              <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-              <span className='text-primary text-xs sm:text-sm font-semibold uppercase tracking-wide'>
-                Great experience in building
-              </span>
-            </div>
-            <h2 className='text-3xl sm:text-4xl lg:text-5xl font-extrabold text-(--page-heading) dark:text-white'>
-              Professional Team
-            </h2>
+    <section className='py-10 min-h-96 bg-background'>
+      <div className='container mx-auto px-4 sm:px-8'>
+        
+        <div className='text-center mb-8'>
+          <div className="inline-block bg-primary/10 px-3 py-1 rounded mb-3">
+            <span className='text-primary text-[10px] font-bold uppercase tracking-widest'>
+              Great experience in building
+            </span>
           </div>
-
-          {/* Team Grid */}
-          <div className='max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'>
-            {teamData.map((team) => (
-              <div 
-                key={team.id} 
-                className="group flex flex-col items-center w-full max-w-sm mx-auto"
-              >
-                {/* Card Container */}
-                <div className="relative w-full bg-background dark:bg-header-background rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                  {/* Image Container */}
-                  <div className="relative h-80 w-full bg-background flex items-center justify-center">
-                    {team.photo ? (
-                      <div className="relative w-full h-full">
-                        <Image
-                          src={team.photo}
-                          alt={`${team.name}-img`}
-                          fill
-                          className='object-contain p-4'
-                        />
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center w-full h-full">
-                        <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-                          <User className="w-12 h-12 text-primary" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Info Card */}
-                  <div className='bg-primary text-primary-foreground px-5 py-4 text-center'>
-                    <h3 className="text-base font-bold leading-tight mb-1">
-                      {team.name}
-                    </h3>
-                    <p className="text-sm leading-snug">
-                      {team.designation}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h2 className='text-2xl sm:text-3xl lg:text-4xl font-black text-(--page-heading)'>
+            Professional Team
+          </h2>
         </div>
-      </section>
-    </>
+
+        <div className='max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
+          {teamData.map((team) => (
+            <div 
+              key={team.id} 
+              className="group relative bg-background rounded-xl border-2 border-border hover:border-primary transition-all duration-300 overflow-hidden"
+            >
+              <div className="relative h-72 bg-gradient-to-b from-primary/5 to-transparent flex items-center justify-center p-6">
+                {team.photo ? (
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={team.photo}
+                      alt={team.name}
+                      fill
+                      className='object-contain group-hover:scale-105 transition-transform duration-300'
+                    />
+                  </div>
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="w-10 h-10 text-primary" />
+                  </div>
+                )}
+              </div>
+
+              <div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 text-white'>
+                <h3 className="text-sm font-bold mb-0.5">
+                  {team.name}
+                </h3>
+                <p className="text-xs opacity-90">
+                  {team.designation}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

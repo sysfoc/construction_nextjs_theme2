@@ -77,9 +77,9 @@ const ConstructionTestimonial: React.FC = () => {
 
             {/* Floating Stats */}
             <div className="absolute bottom-4 left-4 right-4 space-y-2">
-              <div className="bg-[var(--color-primary-foreground)]/95 backdrop-blur-sm rounded-lg p-3">
+              <div className="bg-background backdrop-blur-sm rounded-lg p-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[var(--color-paragraph)]">
+                  <span className="text-xs font-semibold text-paragraph">
                     Customer Satisfaction
                   </span>
                   <span className="text-lg font-semibold text-[var(--color-primary)]">

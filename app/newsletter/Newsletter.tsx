@@ -69,57 +69,70 @@ export default function Newsletter() {
     return null;
   }
 
-  return (
-    <main className="min-h-screen flex items-center justify-center px-6">
-      <section className="max-w-md w-full border border-gray-100 rounded-2xl shadow-md p-8 text-center">
-        <h1 className="text-3xl font-bold mb-3 text-primary">
-          {mode === "subscribe" ? "Subscribe to Newsletter" : "Unsubscribe"}
+ return (
+  <main className="min-h-screen flex items-center justify-center px-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <section className="max-w-md w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg p-8">
+      
+      {/* Header */}
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-bold text-primary mb-2">
+          {mode === "subscribe" ? "Subscribe to our Newsletter" : "Unsubscribe"}
         </h1>
-        <p className="mb-8">
+        <p className="text-gray-600 dark:text-gray-300 text-sm">
           {mode === "subscribe"
-            ? "Enter your email to stay updated. A confirmation link will be sent to your inbox."
-            : "Enter your email to unsubscribe from our mailing list."}
+            ? "Stay updated with our latest news and exclusive updates."
+            : "We're sorry to see you go. You can unsubscribe below."}
         </p>
-        <form onSubmit={handleSubmit} className="space-y-4">
+      </div>
+
+      {/* Toggle Buttons */}
+      <div className="grid grid-cols-2 bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-8">
+        <button
+          onClick={() => setMode("subscribe")}
+          className={`py-2 rounded-lg font-semibold text-sm transition-all ${
+            mode === "subscribe"
+              ? "bg-primary text-white shadow"
+              : "text-gray-600 dark:text-gray-300"
+          }`}
+        >
+          Subscribe
+        </button>
+        <button
+          onClick={() => setMode("unsubscribe")}
+          className={`py-2 rounded-lg font-semibold text-sm transition-all ${
+            mode === "unsubscribe"
+              ? "bg-primary text-white shadow"
+              : "text-gray-600 dark:text-gray-300"
+          }`}
+        >
+          Unsubscribe
+        </button>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="text-left">
+          <label className="text-xs uppercase font-semibold text-gray-700 dark:text-gray-300 tracking-wide">
+            Email Address
+          </label>
           <input
             type="email"
             required
-            placeholder="Enter your email address"
+            placeholder="your.email@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full mt-2 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
           />
-          <button
-            type="submit"
-            className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all"
-          >
-            {mode === "subscribe" ? "Subscribe" : "Unsubscribe"}
-          </button>
-        </form>
-        <div className="mt-6 text-sm">
-          {mode === "subscribe" ? (
-            <>
-              Want to unsubscribe?{" "}
-              <button
-                onClick={() => setMode("unsubscribe")}
-                className="text-primary font-medium hover:underline"
-              >
-                Click here
-              </button>
-            </>
-          ) : (
-            <>
-              Want to subscribe again?{" "}
-              <button
-                onClick={() => setMode("subscribe")}
-                className="text-primary font-medium hover:underline"
-              >
-                Click here
-              </button>
-            </>
-          )}
         </div>
-      </section>
-    </main>
-  );
+
+        <button
+          type="submit"
+          className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all shadow-md flex items-center justify-center gap-2"
+        >
+          {mode === "subscribe" ? "Subscribe" : "Unsubscribe"}
+        </button>
+      </form>
+    </section>
+  </main>
+);
 }

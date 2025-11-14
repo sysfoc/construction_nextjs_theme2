@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { isPageVisible } from "@/lib/api/pageVisibility";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Play, ImageIcon, Grid3x3 } from "lucide-react";
+import { Play, Image as ImageIcon, Layers } from "lucide-react";
 import Loader from "../components/General/Loader";
 
 interface GalleryCategory {
@@ -83,82 +83,81 @@ export default function Gallery() {
         });
 
   return (
-    <main className="min-h-screen text-gray-900 dark:text-gray-100 px-6 py-10 bg-background">
-      <section className="max-w-6xl mx-auto">
-        {/* Centered Header with Counter */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-2 px-4 py-1.5 bg-primary/10 rounded-full">
-            <Grid3x3 className="w-4 h-4 text-primary" />
-            <span className="text-primary text-xs font-bold uppercase">
-              Gallery
-            </span>
+    <main className="min-h-screen text-gray-900 dark:text-gray-100 bg-background">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Compact Side-by-Side Header & Filters */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+          {/* Left: Title */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Layers className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-primary">Gallery</h1>
+              <p className="text-xs text-paragraph dark:text-gray-400">
+                {filteredItems.length} items
+              </p>
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-primary mb-2">
-            Project Gallery
-          </h1>
-          <p className="text-paragraph dark:text-gray-400 text-sm max-w-xl mx-auto">
-            Explore our work through photos and videos
-          </p>
+
+          {/* Right: Filters */}
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setActiveAlbum("All")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                activeAlbum === "All"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-primary"
+              }`}
+            >
+              All · {allImages.length}
+            </button>
+            {categories.map((category) => {
+              const count = allImages.filter(
+                (img) => img.categoryId === category._id
+              ).length;
+              return (
+                <button
+                  key={category._id}
+                  onClick={() => setActiveAlbum(category.name)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeAlbum === category.name
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-primary"
+                  }`}
+                >
+                  {category.name} · {count}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Pill Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
-          <button
-            onClick={() => setActiveAlbum("All")}
-            className={`px-5 py-2 rounded-full text-xs font-semibold uppercase transition-all ${
-              activeAlbum === "All"
-                ? "bg-primary text-white shadow-md"
-                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-primary"
-            }`}
-          >
-            All ({allImages.length})
-          </button>
-          {categories.map((category) => {
-            const count = allImages.filter(
-              (img) => img.categoryId === category._id
-            ).length;
-            return (
-              <button
-                key={category._id}
-                onClick={() => setActiveAlbum(category.name)}
-                className={`px-5 py-2 rounded-full text-xs font-semibold uppercase transition-all ${
-                  activeAlbum === category.name
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-primary"
-                }`}
-              >
-                {category.name} ({count})
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Masonry Gallery Grid */}
+        {/* Grid Gallery */}
         {filteredItems.length === 0 ? (
-          <div className="text-center py-20 bg-background rounded-lg">
-            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
-              <ImageIcon className="w-8 h-8 text-gray-400" />
+          <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-2">
+              <ImageIcon className="w-6 h-6 text-gray-400" />
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm">
               No media found in this category.
             </p>
           </div>
         ) : (
-          <div className="columns-1 sm:columns-2 md:columns-3 gap-4 space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {filteredItems.map((item) => (
               <div
                 key={item._id}
-                className="break-inside-avoid border border-gray-200 shadow-md group relative bg-background rounded-xl overflow-hidden transition-all duration-300"
+                className="group relative bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-primary transition-all duration-300 hover:shadow-lg"
               >
-                {/* Media Container */}
-                <div className="relative w-full overflow-hidden">
+                {/* Media */}
+                <div className="relative aspect-square overflow-hidden">
                   {item.type === "photo" ? (
                     <Image
                       src={item.src || "/placeholder.svg"}
                       alt="Gallery item"
-                      width={500}
-                      height={500}
-                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   ) : (
                     <video
@@ -166,37 +165,34 @@ export default function Gallery() {
                       muted
                       loop
                       src={item.src}
-                      className="w-full h-auto object-cover"
+                      className="w-full h-full object-cover"
                     />
                   )}
 
-                  {/* Type Badge Bottom Left */}
-                  <div className="absolute bottom-3 left-3">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 backdrop-blur-sm rounded-full">
-                      {item.type === "photo" ? (
-                        <ImageIcon className="w-3 h-3 text-white" />
-                      ) : (
-                        <Play className="w-3 h-3 text-white" />
-                      )}
-                      <span className="text-white text-xs font-semibold uppercase">
-                        {item.type}
+                  {/* Overlay Info */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between">
+                      <div className="flex items-center gap-1 px-2 py-0.5 bg-black/50 backdrop-blur-sm rounded">
+                        {item.type === "photo" ? (
+                          <ImageIcon className="w-3 h-3 text-white" />
+                        ) : (
+                          <Play className="w-3 h-3 text-white" />
+                        )}
+                        <span className="text-white text-xs font-medium">
+                          {item.type}
+                        </span>
+                      </div>
+                      <span className="px-2 py-0.5 bg-primary/90 text-primary-foreground text-xs font-semibold rounded">
+                        {categories.find((c) => c._id === item.categoryId)?.name || "Other"}
                       </span>
                     </div>
                   </div>
-                </div>
-
-                {/* Category Tag at Bottom */}
-                <div className="p-3 ">
-                  <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">
-                    {categories.find((c) => c._id === item.categoryId)?.name ||
-                      "Uncategorized"}
-                  </span>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </section>
+      </div>
     </main>
   );
 }

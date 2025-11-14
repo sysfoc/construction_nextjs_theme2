@@ -75,7 +75,7 @@ export default function ProjectsClient() {
   if (loading) {
     return (
       <div className="flex items-start mt-20 justify-center min-h-screen">
-              <Loader/>
+        <Loader/>
       </div>
     );
   }
@@ -85,47 +85,48 @@ export default function ProjectsClient() {
   }
 
   return (
-    <section className="px-6 max-w-5xl mx-auto py-12 bg-background min-h-screen">
-      {/* Top Stats Bar */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-background rounded-lg p-4 text-center border border-gray-200 dark:border-gray-700">
-          <p className="text-2xl font-bold text-primary">{projects.length}</p>
-          <p className="text-xs text-paragraph dark:text-gray-400 uppercase">Total</p>
+    <section className="px-4 md:px-6 max-w-7xl mx-auto py-8 bg-background min-h-screen">
+      {/* Compact Header */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <FolderKanban className="w-5 h-5 text-primary" />
+          <span className="text-primary text-xs font-bold uppercase tracking-wide">Our Projects</span>
         </div>
-        <div className="bg-background rounded-lg p-4 text-center border border-gray-200 dark:border-gray-700">
-          <p className="text-2xl font-bold text-blue-600">{projects.filter(p => p.status === 'ongoing').length}</p>
-          <p className="text-xs text-paragraph dark:text-gray-400 uppercase">Ongoing</p>
-        </div>
-        <div className="bg-background rounded-lg p-4 text-center border border-gray-200 dark:border-gray-700">
-          <p className="text-2xl font-bold text-green-600">{projects.filter(p => p.status === 'completed').length}</p>
-          <p className="text-xs text-paragraph dark:text-gray-400 uppercase">Completed</p>
-        </div>
-        <div className="bg-background rounded-lg p-4 text-center border border-gray-200 dark:border-gray-700">
-          <p className="text-2xl font-bold text-amber-600">{projects.filter(p => p.status === 'upcoming').length}</p>
-          <p className="text-xs text-paragraph dark:text-gray-400 uppercase">Upcoming</p>
-        </div>
+        <h2 className="text-2xl md:text-3xl font-bold text-page-heading dark:text-white">
+          Project Portfolio
+        </h2>
       </div>
 
-      {/* Header with Filters Side by Side */}
-      <div className="bg-background rounded-lg p-5 mb-6 border border-gray-200 dark:border-gray-700">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <FolderKanban className="w-5 h-5 text-primary" />
-              <span className="text-primary text-xs font-bold uppercase">Our Projects</span>
+      {/* Inline Stats & Filter Bar */}
+      <div className="bg-background rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          {/* Compact Stats */}
+          <div className="flex gap-3 overflow-x-auto pb-2 lg:pb-0">
+            <div className="flex items-center gap-2 px-3 py-2 bg-background rounded border border-gray-200 dark:border-gray-700 whitespace-nowrap">
+              <span className="text-xl font-bold text-primary">{projects.length}</span>
+              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">Total</span>
             </div>
-            <h2 className="text-3xl font-bold text-page-heading dark:text-white">
-              Project Portfolio
-            </h2>
+            <div className="flex items-center gap-2 px-3 py-2 bg-background rounded border border-gray-200 dark:border-gray-700 whitespace-nowrap">
+              <span className="text-xl font-bold text-blue-600">{projects.filter(p => p.status === 'ongoing').length}</span>
+              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">Ongoing</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-2 bg-background rounded border border-gray-200 dark:border-gray-700 whitespace-nowrap">
+              <span className="text-xl font-bold text-green-600">{projects.filter(p => p.status === 'completed').length}</span>
+              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">Done</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-2 bg-background rounded border border-gray-200 dark:border-gray-700 whitespace-nowrap">
+              <span className="text-xl font-bold text-amber-600">{projects.filter(p => p.status === 'upcoming').length}</span>
+              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">Upcoming</span>
+            </div>
           </div>
 
-          {/* Inline Filter Tabs */}
-          <div className="flex items-center gap-2 bg-background p-1 rounded-lg">
+          {/* Filter Buttons */}
+          <div className="flex items-center gap-1 bg-background rounded-lg border border-gray-200 dark:border-gray-700 p-1">
             <button
               onClick={() => handleFilter("all")}
-              className={`px-4 py-2 rounded-md text-xs font-semibold uppercase transition-all ${
+              className={`px-3 py-1.5 rounded text-xs font-semibold uppercase transition-all ${
                 activeFilter === "all"
-                  ? "bg-background text-primary shadow-sm"
+                  ? "bg-background text-primary shadow-sm border border-gray-200 dark:border-gray-600"
                   : "text-gray-400 dark:text-gray-300 hover:text-primary"
               }`}
             >
@@ -133,9 +134,9 @@ export default function ProjectsClient() {
             </button>
             <button
               onClick={() => handleFilter("ongoing")}
-              className={`px-4 py-2 rounded-md text-xs font-semibold uppercase transition-all ${
+              className={`px-3 py-1.5 rounded text-xs font-semibold uppercase transition-all ${
                 activeFilter === "ongoing"
-                  ? "bg-background text-primary shadow-sm"
+                  ? "bg-background text-primary shadow-sm border border-gray-200 dark:border-gray-600"
                   : "text-gray-400 dark:text-gray-300 hover:text-primary"
               }`}
             >
@@ -143,9 +144,9 @@ export default function ProjectsClient() {
             </button>
             <button
               onClick={() => handleFilter("completed")}
-              className={`px-4 py-2 rounded-md text-xs font-semibold uppercase transition-all ${
+              className={`px-3 py-1.5 rounded text-xs font-semibold uppercase transition-all ${
                 activeFilter === "completed"
-                  ? "bg-background text-primary shadow-sm"
+                  ? "bg-background text-primary shadow-sm border border-gray-200 dark:border-gray-600"
                   : "text-gray-400 dark:text-gray-300 hover:text-primary"
               }`}
             >
@@ -153,9 +154,9 @@ export default function ProjectsClient() {
             </button>
             <button
               onClick={() => handleFilter("upcoming")}
-              className={`px-4 py-2 rounded-md text-xs font-semibold uppercase transition-all ${
+              className={`px-3 py-1.5 rounded text-xs font-semibold uppercase transition-all ${
                 activeFilter === "upcoming"
-                  ? "bg-background text-primary shadow-sm"
+                  ? "bg-background text-primary shadow-sm border border-gray-200 dark:border-gray-600"
                   : "text-gray-400 dark:text-gray-300 hover:text-primary"
               }`}
             >
@@ -165,81 +166,72 @@ export default function ProjectsClient() {
         </div>
       </div>
 
-      {/* Projects List - Horizontal Cards */}
-      <div className="space-y-4">
+      {/* Projects Grid - Vertical Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProjects.map((project) => (
           <div
             key={project._id}
-            className="bg-background rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
+            className="bg-background rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-primary/30 transition-all duration-300 flex flex-col"
           >
-            <div className="grid md:grid-cols-[240px_1fr] gap-0">
-              {/* Image Section */}
-              <div className="relative h-48 md:h-auto overflow-hidden bg-gray-200 dark:bg-gray-700">
-                <img
-                  src={project.image || "/placeholder.svg"}
-                  alt={project.title}
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                />
-                {/* Status Dot */}
-                <div className="absolute top-3 left-3">
-                  <span className={`w-3 h-3 rounded-full ${statusConfig[project.status].dotColor} block shadow-lg`}></span>
-                </div>
+            {/* Image with Status Badge */}
+            <div className="relative h-48 overflow-hidden bg-gray-200 dark:bg-gray-700">
+              <img
+                src={project.image || "/placeholder.svg"}
+                alt={project.title}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute top-3 right-3">
+                <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${statusConfig[project.status].color} shadow-lg`}>
+                  {statusConfig[project.status].label}
+                </span>
               </div>
+              <div className="absolute top-3 left-3">
+                <span className={`w-2.5 h-2.5 rounded-full ${statusConfig[project.status].dotColor} block shadow-lg`}></span>
+              </div>
+            </div>
 
-              {/* Content Section */}
-              <div className="p-5 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-paragraph dark:text-white mb-1">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-paragraph/70 dark:text-gray-400">
-                        {project.description}
-                      </p>
+            {/* Content */}
+            <div className="p-4 flex flex-col flex-grow">
+              <h3 className="text-base font-bold text-paragraph dark:text-white mb-1.5 line-clamp-1">
+                {project.title}
+              </h3>
+              <p className="text-sm text-paragraph/70 dark:text-gray-400 mb-3 line-clamp-2 flex-grow">
+                {project.description}
+              </p>
+
+              {/* Progress Bar */}
+              {project.status === "ongoing" && project.progress !== undefined && (
+                <div className="mb-3">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3 text-primary" />
+                      <span className="text-xs font-semibold text-paragraph dark:text-gray-300">Progress</span>
                     </div>
-                    <span className={`ml-3 px-3 py-1 rounded-full text-xs font-bold ${statusConfig[project.status].color}`}>
-                      {statusConfig[project.status].label}
-                    </span>
+                    <span className="text-xs font-bold text-primary">{project.progress}%</span>
                   </div>
-
-                  {/* Progress Bar */}
-                  {project.status === "ongoing" && project.progress !== undefined && (
-                    <div className="mb-3">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3 text-primary" />
-                          <span className="text-xs font-semibold text-paragraph dark:text-gray-300">Progress</span>
-                        </div>
-                        <span className="text-xs font-bold text-primary">{project.progress}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                        <div
-                          className="bg-primary h-1.5 rounded-full transition-all"
-                          style={{ width: `${project.progress}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  )}
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                    <div
+                      className="bg-primary h-1.5 rounded-full transition-all"
+                      style={{ width: `${project.progress}%` }}
+                    ></div>
+                  </div>
                 </div>
+              )}
 
-                {/* Bottom Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+              {/* Info Grid */}
+              <div className="grid grid-cols-1 gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                  <span className="text-xs text-paragraph/70 dark:text-gray-400 truncate">{project.location}</span>
+                </div>
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span className="text-xs text-paragraph/70 dark:text-gray-400 truncate">{project.location}</span>
+                    <Calendar className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                    <span className="text-xs text-paragraph/70 dark:text-gray-400">{project.startDate}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span className="text-xs text-paragraph/70 dark:text-gray-400 truncate">
-                      {project.startDate}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span className="text-xs text-paragraph/70 dark:text-gray-400 truncate">
-                      {project.team} Members
-                    </span>
+                    <Users className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                    <span className="text-xs text-paragraph/70 dark:text-gray-400">{project.team} Members</span>
                   </div>
                 </div>
               </div>
@@ -250,8 +242,8 @@ export default function ProjectsClient() {
 
       {/* Empty State */}
       {filteredProjects.length === 0 && (
-        <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-          <FolderKanban className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+        <div className="text-center py-16 bg-background rounded-lg border border-gray-200 dark:border-gray-700">
+          <FolderKanban className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
           <p className="text-paragraph/70 dark:text-gray-400 text-sm">
             No projects found for this filter.
           </p>
