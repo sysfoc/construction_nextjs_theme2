@@ -150,7 +150,7 @@ export default function ConstructionSection(): React.JSX.Element {
             {/* Buttons */}
             <div className="flex flex-wrap gap-2">
               <SolidButton text="Our Projects" onClick={() => router.push("/projects")} />
-              <SolidButton text="Emergency Services" onClick={() => router.push("/emergency-services")} />
+              <SolidButton text="Emergency Services" onClick={() => router.push("/emergency-service")} />
             </div>
 
             {/* Consulting Labels */}
