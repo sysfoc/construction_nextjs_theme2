@@ -6,7 +6,14 @@ import Career from "@/lib/models/Career"
 export async function GET() {
   try {
     await connectDB()
-    const jobs = await Career.find({}).sort({ createdAt: -1 })
+    
+    // Get current date for filtering
+    const currentDate = new Date()
+    
+    // Fetch only jobs where deadline is in the future
+    const jobs = await Career.find({
+      deadline: { $gte: currentDate.toISOString() }
+    }).sort({ createdAt: -1 })
 
     return NextResponse.json({
       jobs: jobs.map((job) => ({
