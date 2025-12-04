@@ -97,8 +97,8 @@ export default function UserManagementPage() {
   const handleAddUser = () => {
     setEditingUser(-1);
     setFormData({
-      name: "New User",
-      email: "newuser@example.com",
+      name: "",
+      email: "",
       role: "user",
       password: "",
     });

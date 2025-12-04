@@ -1,7 +1,13 @@
 // app/projects/page.tsx
 "use client";
 import { useState, useEffect } from "react";
-import { Calendar, MapPin, Users, FolderKanban, TrendingUp } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Users,
+  FolderKanban,
+  TrendingUp,
+} from "lucide-react";
 import type { ProjectData } from "@/lib/models/Project";
 import { isPageVisible } from "@/lib/api/pageVisibility";
 import { useRouter } from "next/navigation";
@@ -15,12 +21,14 @@ const statusConfig = {
   },
   completed: {
     label: "Completed",
-    color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+    color:
+      "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
     dotColor: "bg-green-500",
   },
   upcoming: {
     label: "Upcoming",
-    color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
+    color:
+      "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
     dotColor: "bg-amber-500",
   },
 };
@@ -72,14 +80,29 @@ export default function ProjectsClient() {
     }
   };
 
+  // Helper function to format date from YYYY-MM-DD to readable format
+  const formatDateForDisplay = (dateString: string) => {
+    if (!dateString) return "";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+    } catch {
+      return dateString;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-start mt-20 justify-center min-h-screen">
-        <Loader/>
+        <Loader />
       </div>
     );
   }
-  
+
   if (!isVisible) {
     return null;
   }
@@ -90,7 +113,9 @@ export default function ProjectsClient() {
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
           <FolderKanban className="w-5 h-5 text-primary" />
-          <span className="text-primary text-xs font-bold uppercase tracking-wide">Our Projects</span>
+          <span className="text-primary text-xs font-bold uppercase tracking-wide">
+            Our Projects
+          </span>
         </div>
         <h2 className="text-2xl md:text-3xl font-bold text-page-heading dark:text-white">
           Project Portfolio
@@ -103,20 +128,36 @@ export default function ProjectsClient() {
           {/* Compact Stats */}
           <div className="flex gap-3 overflow-x-auto pb-2 lg:pb-0">
             <div className="flex items-center gap-2 px-3 py-2 bg-background rounded border border-gray-200 dark:border-gray-700 whitespace-nowrap">
-              <span className="text-xl font-bold text-primary">{projects.length}</span>
-              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">Total</span>
+              <span className="text-xl font-bold text-primary">
+                {projects.length}
+              </span>
+              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">
+                Total
+              </span>
             </div>
             <div className="flex items-center gap-2 px-3 py-2 bg-background rounded border border-gray-200 dark:border-gray-700 whitespace-nowrap">
-              <span className="text-xl font-bold text-blue-600">{projects.filter(p => p.status === 'ongoing').length}</span>
-              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">Ongoing</span>
+              <span className="text-xl font-bold text-blue-600">
+                {projects.filter((p) => p.status === "ongoing").length}
+              </span>
+              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">
+                Ongoing
+              </span>
             </div>
             <div className="flex items-center gap-2 px-3 py-2 bg-background rounded border border-gray-200 dark:border-gray-700 whitespace-nowrap">
-              <span className="text-xl font-bold text-green-600">{projects.filter(p => p.status === 'completed').length}</span>
-              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">Done</span>
+              <span className="text-xl font-bold text-green-600">
+                {projects.filter((p) => p.status === "completed").length}
+              </span>
+              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">
+                Done
+              </span>
             </div>
             <div className="flex items-center gap-2 px-3 py-2 bg-background rounded border border-gray-200 dark:border-gray-700 whitespace-nowrap">
-              <span className="text-xl font-bold text-amber-600">{projects.filter(p => p.status === 'upcoming').length}</span>
-              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">Upcoming</span>
+              <span className="text-xl font-bold text-amber-600">
+                {projects.filter((p) => p.status === "upcoming").length}
+              </span>
+              <span className="text-xs text-paragraph dark:text-gray-400 uppercase">
+                Upcoming
+              </span>
             </div>
           </div>
 
@@ -181,12 +222,20 @@ export default function ProjectsClient() {
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute top-3 right-3">
-                <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${statusConfig[project.status].color} shadow-lg`}>
+                <span
+                  className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                    statusConfig[project.status].color
+                  } shadow-lg`}
+                >
                   {statusConfig[project.status].label}
                 </span>
               </div>
               <div className="absolute top-3 left-3">
-                <span className={`w-2.5 h-2.5 rounded-full ${statusConfig[project.status].dotColor} block shadow-lg`}></span>
+                <span
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    statusConfig[project.status].dotColor
+                  } block shadow-lg`}
+                ></span>
               </div>
             </div>
 
@@ -200,38 +249,49 @@ export default function ProjectsClient() {
               </p>
 
               {/* Progress Bar */}
-              {project.status === "ongoing" && project.progress !== undefined && (
-                <div className="mb-3">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="flex items-center gap-1">
-                      <TrendingUp className="w-3 h-3 text-primary" />
-                      <span className="text-xs font-semibold text-paragraph dark:text-gray-300">Progress</span>
+              {project.status === "ongoing" &&
+                project.progress !== undefined && (
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3 text-primary" />
+                        <span className="text-xs font-semibold text-paragraph dark:text-gray-300">
+                          Progress
+                        </span>
+                      </div>
+                      <span className="text-xs font-bold text-primary">
+                        {project.progress}%
+                      </span>
                     </div>
-                    <span className="text-xs font-bold text-primary">{project.progress}%</span>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                      <div
+                        className="bg-primary h-1.5 rounded-full transition-all"
+                        style={{ width: `${project.progress}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                    <div
-                      className="bg-primary h-1.5 rounded-full transition-all"
-                      style={{ width: `${project.progress}%` }}
-                    ></div>
-                  </div>
-                </div>
-              )}
+                )}
 
               {/* Info Grid */}
               <div className="grid grid-cols-1 gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                  <span className="text-xs text-paragraph/70 dark:text-gray-400 truncate">{project.location}</span>
+                  <span className="text-xs text-paragraph/70 dark:text-gray-400 truncate">
+                    {project.location}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                    <span className="text-xs text-paragraph/70 dark:text-gray-400">{project.startDate}</span>
+                    <span className="text-xs text-paragraph/70 dark:text-gray-400">
+                      {formatDateForDisplay(project.startDate)}
+                    </span>{" "}
                   </div>
                   <div className="flex items-center gap-2">
                     <Users className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                    <span className="text-xs text-paragraph/70 dark:text-gray-400">{project.team} Members</span>
+                    <span className="text-xs text-paragraph/70 dark:text-gray-400">
+                      {project.team} Members
+                    </span>
                   </div>
                 </div>
               </div>

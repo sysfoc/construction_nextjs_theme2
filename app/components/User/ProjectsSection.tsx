@@ -70,6 +70,21 @@ export default function ProjectsSection() {
     }
   };
 
+  // Helper function to format date from YYYY-MM-DD to readable format
+const formatDateForDisplay = (dateString: string) => {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric',
+    });
+  } catch {
+    return dateString;
+  }
+};
+
   if (loading) {
     return (
       <Loader height="594px"/>
@@ -174,7 +189,7 @@ export default function ProjectsSection() {
                 <div className="flex items-center justify-between gap-2 text-xs">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                    <span>{project.startDate}</span>
+                    <span>{formatDateForDisplay(project.startDate)}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Users className="w-3.5 h-3.5 text-primary flex-shrink-0" />

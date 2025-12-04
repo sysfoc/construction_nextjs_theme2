@@ -20,6 +20,42 @@ interface FormData {
   photoPreview: string | null
 }
 
+// Helper function to format date for input field (YYYY-MM-DD)
+const formatDateForInput = (dateString: string) => {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      // If it's not a valid date string, try parsing as DD/MM/YYYY for backward compatibility
+      const [day, month, year] = dateString.split("/").map(Number);
+      if (day && month && year) {
+        const newDate = new Date(year, month - 1, day);
+        return newDate.toISOString().split('T')[0];
+      }
+      return dateString;
+    }
+    return date.toISOString().split('T')[0];
+  } catch {
+    return dateString;
+  }
+}
+
+// Helper function to format date for display
+const formatDateForDisplay = (dateString: string) => {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric',
+    });
+  } catch {
+    return dateString;
+  }
+}
+
 export default function ProjectsManagementPage() {
   const [projects, setProjects] = useState<ProjectData[]>([])
   const [loading, setLoading] = useState(true)
@@ -61,8 +97,8 @@ export default function ProjectsManagementPage() {
       description: project.description,
       location: project.location,
       status: project.status,
-      startDate: project.startDate,
-      endDate: project.endDate || "",
+      startDate: formatDateForInput(project.startDate),
+      endDate: project.endDate ? formatDateForInput(project.endDate) : "",
       image: project.image,
       team: project.team,
       progress: project.progress || 0,
@@ -318,11 +354,10 @@ export default function ProjectsManagementPage() {
                       Start Date
                     </label>
                     <input
-                      type="text"
+                      type="date"
                       name="startDate"
                       value={formData.startDate}
                       onChange={handleInputChange}
-                      placeholder="Jan 2024"
                       className="w-full px-3 sm:px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm sm:text-base"
                     />
                   </div>
@@ -332,11 +367,10 @@ export default function ProjectsManagementPage() {
                       End Date
                     </label>
                     <input
-                      type="text"
+                      type="date"
                       name="endDate"
                       value={formData.endDate}
                       onChange={handleInputChange}
-                      placeholder="Dec 2025"
                       className="w-full px-3 sm:px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm sm:text-base"
                     />
                   </div>
@@ -495,11 +529,10 @@ export default function ProjectsManagementPage() {
                         Start Date
                       </label>
                       <input
-                        type="text"
+                        type="date"
                         name="startDate"
                         value={formData.startDate}
                         onChange={handleInputChange}
-                        placeholder="Jan 2024"
                         className="w-full px-3 sm:px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm sm:text-base"
                       />
                     </div>
@@ -509,11 +542,10 @@ export default function ProjectsManagementPage() {
                         End Date
                       </label>
                       <input
-                        type="text"
+                        type="date"
                         name="endDate"
                         value={formData.endDate}
                         onChange={handleInputChange}
-                        placeholder="Dec 2025"
                         className="w-full px-3 sm:px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm sm:text-base"
                       />
                     </div>
@@ -596,7 +628,13 @@ export default function ProjectsManagementPage() {
                           {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm text-gray-600 break-words">{project.description}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 break-words mb-2">{project.description}</p>
+                      
+                      {/* Date display in read mode */}
+                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <span>Start: {formatDateForDisplay(project.startDate)}</span>
+                        {project.endDate && <span>End: {formatDateForDisplay(project.endDate)}</span>}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 w-full sm:w-auto justify-end sm:ml-4 flex-shrink-0">
