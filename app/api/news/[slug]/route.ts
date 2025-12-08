@@ -1,3 +1,4 @@
+// app/api/news/[slug]/route.ts
 import { type NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import News from "@/lib/models/News";
@@ -10,7 +11,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ slu
 
     if (!article) return NextResponse.json({ error: "Article not found" }, { status: 404 });
 
-    return NextResponse.json(article);
+    return NextResponse.json({
+      ...article.toObject(),
+      date: article.date.toLocaleDateString("en-GB").replace(/\//g, '-'),
+    });
   } catch (error) {
     console.error("Get article error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
@@ -23,10 +27,19 @@ export async function PUT(request: NextRequest, context: { params: Promise<{ slu
     await connectDB();
     const updateData = await request.json();
 
+    // Convert date string to Date object if date is being updated
+    if (updateData.date) {
+      const [day, month, year] = updateData.date.split("-")
+      updateData.date = new Date(`${year}-${month}-${day}`)
+    }
+
     const article = await News.findOneAndUpdate({ slug }, updateData, { new: true });
     if (!article) return NextResponse.json({ error: "Article not found" }, { status: 404 });
 
-    return NextResponse.json(article);
+    return NextResponse.json({
+      ...article.toObject(),
+      date: article.date.toLocaleDateString("en-GB").replace(/\//g, '-'),
+    });
   } catch (error) {
     console.error("Update article error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

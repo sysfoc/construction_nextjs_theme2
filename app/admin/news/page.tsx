@@ -56,7 +56,9 @@ export default function NewsManagementPage() {
       title: newsItem.title,
       slug: newsItem.slug,
       excerpt: newsItem.excerpt,
-      date: newsItem.date,
+      date: newsItem.date.includes('/') 
+  ? newsItem.date.replace(/\//g, '-')
+  : newsItem.date,
       author: newsItem.author,
       image: newsItem.image,
       content: newsItem.content,
@@ -158,7 +160,7 @@ export default function NewsManagementPage() {
       title: "",
       slug: "",
       excerpt: "",
-      date: new Date().toLocaleDateString("en-GB"),
+      date: new Date().toISOString().split('T')[0].split('-').reverse().join('-'),
       author: "",
       image: "",
       content: [],
@@ -268,13 +270,16 @@ export default function NewsManagementPage() {
                   <div className="w-full">
                     <label className="block text-xs sm:text-sm text-[var(--header-text)] mb-1.5 sm:mb-2">Date</label>
                     <input
-                      type="text"
-                      name="date"
-                      value={formData.date}
-                      onChange={handleInputChange}
-                      placeholder="DD-MM-YYYY"
-                      className="w-full px-3 sm:px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm sm:text-base"
-                    />
+  type="date"
+  value={formData.date.split('-').reverse().join('-')} // Convert DD-MM-YYYY to YYYY-MM-DD
+  onChange={(e) => {
+    const [year, month, day] = e.target.value.split('-');
+    handleInputChange({
+      target: { name: 'date', value: `${day}-${month}-${year}` }
+    } as React.ChangeEvent<HTMLInputElement>);
+  }}
+  className="w-full px-3 sm:px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm sm:text-base"
+/>
                   </div>
 
                   <div className="w-full">
@@ -407,14 +412,17 @@ export default function NewsManagementPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="w-full">
                       <label className="block text-xs sm:text-sm text-[var(--header-text)] mb-1.5 sm:mb-2">Date</label>
-                      <input
-                        type="text"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleInputChange}
-                        placeholder="DD-MM-YYYY"
-                        className="w-full px-3 sm:px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm sm:text-base"
-                      />
+                     <input
+  type="date"
+  value={formData.date.split('-').reverse().join('-')} // Convert DD-MM-YYYY to YYYY-MM-DD
+  onChange={(e) => {
+    const [year, month, day] = e.target.value.split('-');
+    handleInputChange({
+      target: { name: 'date', value: `${day}-${month}-${year}` }
+    } as React.ChangeEvent<HTMLInputElement>);
+  }}
+  className="w-full px-3 sm:px-4 py-2 border border-[var(--border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary)] text-sm sm:text-base"
+/>
                     </div>
 
                     <div className="w-full">

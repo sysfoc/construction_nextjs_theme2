@@ -1,3 +1,4 @@
+// app/lib/models/News.ts
 import mongoose from "mongoose"
 
 const newsSchema = new mongoose.Schema(
@@ -16,7 +17,7 @@ const newsSchema = new mongoose.Schema(
       required: true,
     },
     date: {
-      type: String,
+      type: Date,
       required: true,
     },
     author: {

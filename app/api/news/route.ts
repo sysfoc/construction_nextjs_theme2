@@ -14,7 +14,7 @@ export async function GET() {
         slug: article.slug,
         title: article.title,
         excerpt: article.excerpt,
-        date: article.date,
+        date: article.date.toLocaleDateString("en-GB").replace(/\//g, '-'),
         author: article.author,
         image: article.image,
         content: article.content,
@@ -39,11 +39,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
+    // Convert date string to Date object
+    const [day, month, year] = date.split("-")
+    const dateObj = new Date(`${year}-${month}-${day}`)
+
     const newArticle = await News.create({
       title,
       slug,
       excerpt,
-      date,
+      date: dateObj,
       author,
       image,
       content,
@@ -55,7 +59,7 @@ export async function POST(request: NextRequest) {
         slug: newArticle.slug,
         title: newArticle.title,
         excerpt: newArticle.excerpt,
-        date: newArticle.date,
+        date: newArticle.date.toLocaleDateString("en-GB"),
         author: newArticle.author,
         image: newArticle.image,
         content: newArticle.content,
