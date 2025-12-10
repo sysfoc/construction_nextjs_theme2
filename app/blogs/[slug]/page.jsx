@@ -3,7 +3,7 @@ import BlogDetail from "@/app/components/blog/BlogDetail"
 
 export async function generateMetadata({ params }) {
   const resolvedParams = await params
-   const BASE_URL = "http://localhost:3000" || process.env.NEXT_PUBLIC_BASE_URL
+   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL
   try {
     const res = await fetch(`${BASE_URL}/api/blog/${resolvedParams.slug}`, {
       cache: "no-store",
@@ -40,9 +40,10 @@ export async function generateMetadata({ params }) {
 
 const BlogPage = async ({ params }) => {
   const resolvedParams = await params
+   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || process.env.BASE_URL
 
   try {
-    const res = await fetch(`http://localhost:3000/api/blog/${resolvedParams.slug}`, { 
+    const res = await fetch(`${BASE_URL}/api/blog/${resolvedParams.slug}`, { 
       cache: "no-store" 
     })
     

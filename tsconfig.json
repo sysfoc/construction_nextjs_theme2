@@ -36,7 +36,7 @@
     "scripts/seed.mjs",
     "scripts/seed-pages.mjs",
     ".next/dev/types/**/*.ts"
-  ],
+, "app/blogs/BlogsClient.jsx"  ],
   "exclude": [
     "node_modules"
   ]
