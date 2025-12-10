@@ -2,8 +2,9 @@
 import { Alert, Button, FileInput, Label, TextInput } from "flowbite-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import React, { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Loader from "../../../../components/General/Loader";
 
 const LazyJoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 export default function EditBlog() {
@@ -15,10 +16,12 @@ export default function EditBlog() {
     metaTitle: "",
     metaDescription: "",
     blogWriter: "",
+    content: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useRouter();
   const params = useParams();
 
@@ -63,10 +66,28 @@ export default function EditBlog() {
   };
 
   useEffect(() => {
-    fetch(`/api/blog/${params.id}`)
-      .then((res) => res.json())
-      .then((data) => setFormData(data.blog));
-  }, []);
+    if (!params?.slug) return;
+
+    const fetchBlog = async () => {
+      try {
+        setIsLoading(true);
+        const res = await fetch(`/api/blog/${params.slug}`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch blog");
+        }
+        const data = await res.json();
+        setFormData(data.blog);
+      } catch (err) {
+        setError(true);
+        setErrorMessage(err.message || "Failed to load blog");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlog();
+  }, [params?.slug]);
+
   const handleFormData = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -85,11 +106,9 @@ export default function EditBlog() {
       setLoading(false);
       if (res.ok) {
         navigate.push("/admin/blogs");
-        setFormData({});
       } else {
         setError(true);
         setErrorMessage(data.message);
-        setFormData({});
         setLoading(false);
       }
     } catch (error) {
@@ -98,15 +117,24 @@ export default function EditBlog() {
       setLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
-    <section className='py-5 px-5 bg-background'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-2xl font-semibold mb-4'>Edit Blog</h2>
+    <section className="py-5 px-5 bg-background">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold mb-4">Edit Blog</h2>
         <div>
           <Link href={"/admin/blogs"}>
             <Button
-              size='md'
-              className='bg-blue-500 hover:!bg-blue-600 text-white rounded-md'
+              size="md"
+              className="bg-blue-500 hover:!bg-blue-600 text-white rounded-md"
             >
               Go Back
             </Button>
@@ -116,69 +144,79 @@ export default function EditBlog() {
       <div>
         <form onSubmit={handleFormData}>
           {error && (
-            <Alert color='failure'>
-              <span className='font-medium'>{errorMessage}</span>
+            <Alert color="failure">
+              <span className="font-medium">{errorMessage}</span>
             </Alert>
           )}
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div className='flex flex-col gap-1'>
-              <Label className="text-paragraph" htmlFor='title'>H1/Title</Label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <Label className="text-paragraph" htmlFor="title">
+                H1/Title
+              </Label>
               <TextInput
-                type='text'
-                id='title'
-                name='title'
-                placeholder='Title'
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Title"
                 value={formData.title || ""}
                 onChange={handleChange}
               />
             </div>
-            <div className='flex flex-col gap-1'>
-              <Label className="text-paragraph" htmlFor='slug'>Slug</Label>
+            <div className="flex flex-col gap-1">
+              <Label className="text-paragraph" htmlFor="slug">
+                Slug
+              </Label>
               <TextInput
-                type='text'
-                id='slug'
-                name='slug'
-                placeholder='slug'
+                type="text"
+                id="slug"
+                name="slug"
+                placeholder="slug"
                 readOnly
                 value={formData.slug || ""}
               />
             </div>
-            <div className='flex flex-col gap-1'>
-              <Label className="text-paragraph" htmlFor='metaTitle'>Meta Title</Label>
+            <div className="flex flex-col gap-1">
+              <Label className="text-paragraph" htmlFor="metaTitle">
+                Meta Title
+              </Label>
               <TextInput
-                type='text'
-                id='metaTitle'
-                name='metaTitle'
-                placeholder='Meta Title'
+                type="text"
+                id="metaTitle"
+                name="metaTitle"
+                placeholder="Meta Title"
                 value={formData.metaTitle || ""}
                 onChange={handleChange}
               />
             </div>
-            <div className='flex flex-col gap-1'>
-              <Label className="text-paragraph" htmlFor='metaDescription'>Meta Description</Label>
+            <div className="flex flex-col gap-1">
+              <Label className="text-paragraph" htmlFor="metaDescription">
+                Meta Description
+              </Label>
               <TextInput
-                type='text'
-                id='metaDescription'
-                name='metaDescription'
-                placeholder='Meta Description'
+                type="text"
+                id="metaDescription"
+                name="metaDescription"
+                placeholder="Meta Description"
                 value={formData.metaDescription || ""}
                 onChange={handleChange}
               />
             </div>
-            <div className='flex flex-col gap-1'>
-              <Label className="text-paragraph" htmlFor='blogWriter'>Writer</Label>
+            <div className="flex flex-col gap-1">
+              <Label className="text-paragraph" htmlFor="blogWriter">
+                Writer
+              </Label>
               <TextInput
-                type='text'
-                id='blogWriter'
-                name='blogWriter'
-                placeholder='John Doe'
+                type="text"
+                id="blogWriter"
+                name="blogWriter"
+                placeholder="John Doe"
                 value={formData.blogWriter || ""}
                 onChange={handleChange}
               />
             </div>
-            <div className='flex flex-col gap-1 col-span-2'>
+            <div className="flex flex-col gap-1 col-span-2">
               <div>
-                <p className='text-sm font-semibold'>Content:</p>
+                <p className="text-sm font-semibold">Content:</p>
                 <Suspense fallback={<p>Loading editor...</p>}>
                   <LazyJoditEditor
                     value={formData.content}
@@ -190,22 +228,24 @@ export default function EditBlog() {
                 </Suspense>
               </div>
             </div>
-            <div className='flex flex-col gap-1 col-span-2'>
-              <Label className="text-paragraph" htmlFor='image'>Image</Label>
+            <div className="flex flex-col gap-1 col-span-2">
+              <Label className="text-paragraph" htmlFor="image">
+                Image
+              </Label>
               <FileInput
-                id='image'
-                name='image'
-                accept='image/*'
-                placeholder='Upload an image'
+                id="image"
+                name="image"
+                accept="image/*"
+                placeholder="Upload an image"
                 onChange={handleImageChange}
               />
             </div>
           </div>
-          <div className='mt-8'>
+          <div className="mt-8">
             <Button
               disabled={loading}
-              type='submit'
-              className='w-full bg-[#182641] hover:!bg-[#182641] text-white rounded-md'
+              type="submit"
+              className="w-full bg-[#182641] hover:!bg-[#182641] text-white rounded-md"
             >
               Submit
             </Button>

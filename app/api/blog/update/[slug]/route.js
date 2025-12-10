@@ -1,41 +1,44 @@
-import { NextResponse } from "next/server";
-import Blog from "@/lib/models/blog.model";
-import { connectDB } from "@/lib/mongodb";
-import path from "path";
-import { writeFile, unlink } from "fs/promises";
+// app/api/blog/update/[slug]/route.js
+import { NextResponse } from "next/server"
+import Blog from "../../../../../lib/models/blog.model"
+import { connectDB } from "../../../../../lib/mongodb"
+import path from "path"
+import { writeFile, unlink } from "fs/promises"
 
 export async function PATCH(req, { params }) {
-  await connectDB();
-  const { slug } = params;
-  const formData = await req.formData();
-  const title = formData.get("title");
-  const content = formData.get("content");
-  const metaTitle = formData.get("metaTitle");
-  const metaDescription = formData.get("metaDescription");
-  const writer = formData.get("blogWriter");
-  const image = formData.get("image");
+  const { slug } = await params
+
+  await connectDB()
+
+  const formData = await req.formData()
+  const title = formData.get("title")
+  const content = formData.get("content")
+  const metaTitle = formData.get("metaTitle")
+  const metaDescription = formData.get("metaDescription")
+  const blogWriter = formData.get("blogWriter")
+  const image = formData.get("image")
 
   try {
-    const blog = await Blog.findOne({ slug });
+    const blog = await Blog.findOne({ slug })
     if (!blog) {
-      return NextResponse.json({ message: "Blog not found" }, { status: 404 });
+      return NextResponse.json({ message: "Blog not found" }, { status: 404 })
     }
-    let imagePath = blog.image;
+    let imagePath = blog.image
     if (image && typeof image === "object" && image.name) {
-      const buffer = Buffer.from(await image.arrayBuffer());
+      const buffer = Buffer.from(await image.arrayBuffer())
       if (blog.image && blog.image !== "") {
-        const oldPath = path.join(process.cwd(), "public", blog.image);
+        const oldPath = path.join(process.cwd(), "public", blog.image)
         try {
-          await unlink(oldPath);
+          await unlink(oldPath)
         } catch (err) {
-          return NextResponse.json({ message: err.message }, { status: 500 });
+          console.error("Error deleting old image:", err)
         }
       }
-      const filename = `${Date.now()}-${image.name}`;
-      const fullPath = path.join(process.cwd(), "public", "blog", filename);
-      await writeFile(fullPath, buffer);
+      const filename = `${Date.now()}-${image.name}`
+      const fullPath = path.join(process.cwd(), "public", "blog", filename)
+      await writeFile(fullPath, buffer)
 
-      imagePath = `/blog/${filename}`;
+      imagePath = `/blog/${filename}`
     }
     const updatedBlog = await Blog.findOneAndUpdate(
       { slug },
@@ -44,15 +47,15 @@ export async function PATCH(req, { params }) {
         content,
         metaTitle,
         metaDescription,
-        blogWriter: writer,
+        blogWriter,
         image: imagePath,
       },
-      { new: true }
-    );
+      { new: true },
+    )
 
-    return NextResponse.json({ blog: updatedBlog }, { status: 200 });
+    return NextResponse.json({ blog: updatedBlog }, { status: 200 })
   } catch (error) {
-    console.error("Update failed:", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.error("Update failed:", error)
+    return NextResponse.json({ message: error.message }, { status: 500 })
   }
 }

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import {
   Button,
   Spinner,
@@ -9,43 +9,50 @@ import {
   TableHeadCell,
   TableRow,
   TextInput,
-} from "flowbite-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+} from "flowbite-react"
+import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export default function Blog() {
-  const [formData, setFormData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [loading, setLoading] = useState(false)
   const getAllBlogs = async () => {
-    setLoading(true);
-    const res = await fetch("/api/blog/all", {
-      method: "GET",
-    });
-    const data = await res.json();
-    console.log(data)
-    setLoading(false);
-    setFormData(data.blogs);
-  };
-  useEffect(() => {
-    getAllBlogs();
-  }, []);
-
-  const handleDelete = async (id) => {
+    setLoading(true)
     try {
-      await fetch(`/api/blog/delete/${id}`, {
-        method: "DELETE",
-      });
-      getAllBlogs();
-      setFormData(formData.filter((item) => item.id !== id));
+      const res = await fetch("/api/blog/all", {
+        method: "GET",
+      })
+      const data = await res.json()
+      setFormData(data.blogs || [])
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching blogs:", error)
     }
-  };
+    setLoading(false)
+  }
+  useEffect(() => {
+    getAllBlogs()
+  }, [])
+
+  const handleDelete = async (slug) => {
+    try {
+      const res = await fetch(`/api/blog/delete/${slug}`, {
+        method: "DELETE",
+      })
+      if (res.ok) {
+        setFormData(formData.filter((item) => item.slug !== slug))
+        await getAllBlogs()
+      } else {
+        console.error("Delete failed")
+      }
+    } catch (error) {
+      console.error("Delete error:", error)
+    }
+  }
 
   const filteredResults = searchTerm
     ? formData.filter((item) => {
-        const lowerSearch = searchTerm.toLowerCase();
+        const lowerSearch = searchTerm.toLowerCase()
         const createdAtMatch = item?.createdAt
           ? new Date(item.createdAt)
               .toLocaleDateString("en-US", {
@@ -55,67 +62,54 @@ export default function Blog() {
               })
               .toLowerCase()
               .includes(lowerSearch)
-          : false;
+          : false
         return (
           item?._id?.toLowerCase()?.includes(lowerSearch) ||
           item?.title?.toLowerCase()?.includes(lowerSearch) ||
           item?.slug?.toLowerCase()?.includes(lowerSearch) ||
           item?.blogWriter?.toLowerCase()?.includes(lowerSearch) ||
           createdAtMatch
-        );
+        )
       })
-    : formData;
+    : formData
   return (
-    <section className='h-full p-5 bg-background'>
+    <section className="h-full p-5 bg-background">
       <div>
-        <div className='flex items-center justify-between mb-3'>
-          <h2 className='text-2xl font-semibold'>Blogs</h2>
-          <div className='flex gap-2 items-center'>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-2xl font-semibold">Blogs</h2>
+          <div className="flex gap-2 items-center">
             <TextInput
-              id='search'
-              type='search'
-              placeholder='Search'
-              className='w-[300px]'
+              id="search"
+              type="search"
+              placeholder="Search"
+              className="w-[300px]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Link href={"/admin/blogs/add"}>
-              <Button
-                size='md'
-                className='bg-[#e56c16] hover:!bg-[#e56c16]/90 text-white rounded-md'
-              >
+              <Button size="md" className="bg-[#e56c16] hover:!bg-[#e56c16]/90 text-white rounded-md">
                 Add Blog
               </Button>
             </Link>
           </div>
         </div>
       </div>
-      <div className='overflow-x-auto bg-black'>
+      <div className="overflow-x-auto bg-black">
         <Table className="!bg-transparent dark:!bg-transparent">
           <TableHead>
             <TableRow>
-              <TableHeadCell className='!bg-[#182641] text-white'>
-                Title
-              </TableHeadCell>
-              <TableHeadCell className='!bg-[#182641] text-white'>
-                Slug
-              </TableHeadCell>
-              <TableHeadCell className='!bg-[#182641] text-white'>
-                Author
-              </TableHeadCell>
-              <TableHeadCell className='!bg-[#182641] text-white'>
-                Date
-              </TableHeadCell>
-              <TableHeadCell className='!bg-[#182641] text-white'>
-                Action
-              </TableHeadCell>
+              <TableHeadCell className="!bg-[#182641] text-white">Title</TableHeadCell>
+              <TableHeadCell className="!bg-[#182641] text-white">Slug</TableHeadCell>
+              <TableHeadCell className="!bg-[#182641] text-white">Author</TableHeadCell>
+              <TableHeadCell className="!bg-[#182641] text-white">Date</TableHeadCell>
+              <TableHeadCell className="!bg-[#182641] text-white">Action</TableHeadCell>
             </TableRow>
           </TableHead>
-          <TableBody className='divide-y'>
+          <TableBody className="divide-y">
             {loading && (
               <TableRow>
-                <TableCell colSpan={5} className='text-center'>
-                  <Spinner size='lg' />
+                <TableCell colSpan={5} className="text-center">
+                  <Spinner size="lg" />
                 </TableCell>
               </TableRow>
             )}
@@ -132,19 +126,16 @@ export default function Blog() {
                       day: "numeric",
                     })}
                   </TableCell>
-                  <TableCell className='flex gap-2'>
+                  <TableCell className="flex gap-2">
                     <Link href={`/admin/blogs/edit/${item.slug}`}>
-                      <Button
-                        size='sm'
-                        className='bg-[#182641] hover:!bg-[#182641]/90 text-white rounded-md'
-                      >
+                      <Button size="sm" className="bg-[#182641] hover:!bg-[#182641]/90 text-white rounded-md">
                         Edit
                       </Button>
                     </Link>
                     <Button
-                      size='sm'
-                      onClick={() => handleDelete(item._id)}
-                      className='bg-red-500 hover:!bg-red-600 text-white rounded-md'
+                      size="sm"
+                      onClick={() => handleDelete(item.slug)}
+                      className="bg-red-500 hover:!bg-red-600 text-white rounded-md"
                     >
                       Delete
                     </Button>
@@ -152,7 +143,7 @@ export default function Blog() {
                 </TableRow>
               ))) || (
               <TableRow>
-                <TableCell colSpan={5} className='text-center'>
+                <TableCell colSpan={5} className="text-center">
                   No Blogs found, Try created one
                 </TableCell>
               </TableRow>
@@ -161,5 +152,5 @@ export default function Blog() {
         </Table>
       </div>
     </section>
-  );
+  )
 }
